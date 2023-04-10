@@ -1,0 +1,49 @@
+@import '../../globals/globals.css';
+
+.landing-nav-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: clamp(5rem, 15vw, 8rem);
+    position: relative;
+}
+
+#lexemeIcon {
+    height: 100%;
+    width: clamp(5rem, 15vw, 8rem);
+}
+
+.landing-lexeme-title {
+    font-size: clamp(3rem, 10vw, 4rem);
+    color: var(--red);
+
+    & span {
+        color: black;
+    }
+}
+
+#loginButton {
+    width: clamp(8rem, 15vw, 10rem);
+    min-height: 2rem;
+    position: absolute;
+    right: 1rem;
+    background: none;
+    font-size: clamp(0.75rem, 15vw, 1.5rem);
+    border: 2px solid var(--red);
+    color: black;
+    border-radius: 20px;
+    padding: 0.5rem;
+
+    &:hover {
+        background-color: var(--red);
+        color: white;
+    }
+}
+
+@media only screen and (max-width: 450px) {
+    #loginButton {
+        position: static;
+        margin-left: 1rem;
+    }
+}
+
