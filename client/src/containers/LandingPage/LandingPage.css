@@ -4,13 +4,14 @@
     display: flex;
     align-items: center;
     width: 100%;
-    height: clamp(5rem, 15vw, 8rem);
+    height: clamp(5rem, 10vw, 8rem);
     position: relative;
+    margin-bottom: 3rem;
 }
 
 #lexemeIcon {
     height: 100%;
-    width: clamp(5rem, 15vw, 8rem);
+    width: clamp(5rem, 10vw, 8rem);
 }
 
 .landing-lexeme-title {
@@ -23,12 +24,12 @@
 }
 
 #loginButton {
-    width: clamp(8rem, 15vw, 10rem);
+    width: clamp(8rem, 10vw, 10rem);
     min-height: 2rem;
     position: absolute;
     right: 1rem;
     background: none;
-    font-size: clamp(0.75rem, 15vw, 1.5rem);
+    font-size: clamp(0.5rem, 10vw, 1.5rem);
     border: 2px solid var(--red);
     color: black;
     border-radius: 20px;
@@ -40,6 +41,86 @@
     }
 }
 
+.landing-intro-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+
+    & hr {
+        flex-basis: 100%;
+        border: none;
+    }
+}
+
+.triangle {
+    width: 5rem;
+    height: 10rem;
+    background-color: var(--red);
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
+    margin-top: -1rem;
+    margin-right: 1rem;
+}
+
+.tag-line {
+    border-top: 1rem solid var(--red);
+    width: max-content;
+    display: flex;
+    align-items: center;
+    padding-right: 1rem;
+}
+
+.tag-line-text {
+    font-size: clamp(2rem, 10vw, 3rem);
+}
+
+.intro-description {
+    font-size: clamp(0.75rem, 10vw, 1.5rem);
+    text-align: center;
+    flex-basis: 100%;
+    margin-bottom: 2rem;
+}
+
+#getStartedButton {
+    width: clamp(12rem, 10vw, 15rem);
+    min-height: 2.5rem;
+    background-color: black;
+    font-size: clamp(1rem, 10vw, 2rem);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 0.5rem;
+    margin-bottom: 2rem;
+    border: 2px solid black;
+
+    &:hover {
+        background-color: white;
+        color: black;
+    }
+}
+
+#learnMoreIcon {
+    color: var(--red)
+}
+
+.landing-graphic {
+    width: clamp(10rem, 28vw, 30rem);
+    height: clamp(10rem, 28vw, 30rem);
+    position: absolute;
+    bottom: 0;
+    z-index: -1;
+}
+
+#graphicOne {
+    left: 0;
+}
+
+#graphicTwo {
+    right: 0;
+}
+
+
+/* Media Queries*/
 @media only screen and (max-width: 450px) {
     #loginButton {
         position: static;
