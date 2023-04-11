@@ -17,10 +17,10 @@
 .landing-lexeme-title {
     font-size: clamp(3rem, 10vw, 4rem);
     color: var(--red);
+}
 
-    & span {
-        color: black;
-    }
+.landing-lexeme-title span {
+    color: black;
 }
 
 #loginButton {
@@ -34,11 +34,11 @@
     color: black;
     border-radius: 20px;
     padding: 0.5rem;
+}
 
-    &:hover {
-        background-color: var(--red);
-        color: white;
-    }
+#loginButton:hover {
+    background-color: var(--red);
+    color: white;
 }
 
 .landing-intro-container {
@@ -46,11 +46,11 @@
     flex-wrap: wrap;
     justify-content: center;
     width: 100%;
+}
 
-    & hr {
-        flex-basis: 100%;
-        border: none;
-    }
+.landing-intro-container hr {
+    flex-basis: 100%;
+    border: none;
 }
 
 .triangle {
@@ -82,7 +82,7 @@
 }
 
 #getStartedButton {
-    width: clamp(12rem, 10vw, 15rem);
+    width: clamp(15rem, 10vw, 20rem);
     min-height: 2.5rem;
     background-color: black;
     font-size: clamp(1rem, 10vw, 2rem);
@@ -92,11 +92,11 @@
     padding: 0.5rem;
     margin-bottom: 2rem;
     border: 2px solid black;
+}
 
-    &:hover {
-        background-color: white;
-        color: black;
-    }
+#getStartedButton:hover {
+    background-color: white;
+    color: black;
 }
 
 #learnMoreIcon {
