@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const KEY = process.env.API_KEY
+const KEY = process.env.BOOK_KEY
 
 // Get book data
 export const fetchBook = (params) => {

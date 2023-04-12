@@ -6,3 +6,11 @@ body {
   box-sizing: border-box;
 }
 
+body button:hover {
+  cursor: pointer;
+}
+
+body input {
+  font-family: 'Raleway', sans-serif;
+}
+

@@ -1,3 +1,6 @@
+import { useSelector, useDispatch } from 'react-redux'
+import { setOpen } from '../../slices/SignUpSlice'
+import { SignUpForm } from '../../components/AuthForms'
 import { BsArrowDownCircle } from 'react-icons/bs'
 import Icon from '../../assets/LexemeIcon.png'
 import LandingGraphicOne from '../../assets/LandingGraphic1.png'
@@ -5,6 +8,9 @@ import LandingGraphicTwo from '../../assets/LandingGraphic2.png'
 import './LandingPage.css'
 
 const LandingPage = () => {
+    const { open }= useSelector(state => state.signUp)
+    const dispatch = useDispatch()
+
     return (<>
         <div className='landing-nav-container'>
             <img id='lexemeIcon' src={Icon} alt='Lexeme Icon' />
@@ -20,7 +26,7 @@ const LandingPage = () => {
             <div className='intro-description'>
                 Define and save the words you encounter on your reading journey.
             </div>
-            <button id='getStartedButton'>Get Started</button>
+            <button id='getStartedButton' onClick={() => dispatch(setOpen(true))}>Get Started</button>
             <div className='intro-description'>
                 Want to learn more?
             </div>
@@ -28,6 +34,7 @@ const LandingPage = () => {
             <img className='landing-graphic' id='graphicOne' src={LandingGraphicOne} alt='Graphic One' />
             <img className='landing-graphic' id='graphicTwo' src={LandingGraphicTwo} alt='Graphic Two' />
         </div>
+        {open && <SignUpForm />}
     </>)
 }
 
