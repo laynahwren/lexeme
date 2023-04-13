@@ -1,17 +1,20 @@
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setOpen } from '../../slices/SignUpSlice'
+import { useNavigate } from 'react-router-dom'
+import { setSignupOpen } from '../../slices/AuthSlice'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
-import { BiShow, BiHide, BiSearch } from 'react-icons/bi'
+import { BiShow, BiHide } from 'react-icons/bi'
+import { login } from '../../utils/userAccount'
 import './styles.css'
 
 const SignUpForm = () => {
     const [showType, setShowType] = useState('password')
-    useSelector(state => state.signUp)
+    useSelector(state => state.auth.signupOpen)
     const dispatch = useDispatch()
+    const naviagte = useNavigate()
 
     const onSubmit = async () => {
-        const res = await fetch('/auth/signup', {
+        await fetch('/auth/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -19,42 +22,44 @@ const SignUpForm = () => {
             },
             body: JSON.stringify({
                 name: document.getElementById('firstNameInput').value,
-                email: document.getElementById('emailInput').value,
-                password: document.getElementById('passwordInput').value,
+                email: document.getElementById('newEmailInput').value,
+                password: document.getElementById('newPasswordInput').value,
                 books: [],
                 words: []
             })
-        })
-        console.log(res)
+        }).then(response => response.json())
+        .then((body) => {
+                login(body)
+                naviagte('home')
+        }); 
     }
 
     return (
-        <div className='signup-container'>
-            <div className='create-account'>
+        <div className='auth-form-container'>
+            <div className='form-title'>
                 Create an Account
             </div>
-            <button id='closeBtn' onClick={() => dispatch(setOpen(false))}>
+            <button id='closeBtn' onClick={() => dispatch(setSignupOpen(false))}>
                 <AiOutlineCloseCircle size={20} />
             </button>
-            <form id='signupForm' onSubmit={onSubmit}>
+            <form className='auth-form' id='signupForm'>
                 <label htmlFor='firstNameInput'>First Name</label>
-                <input id='firstNameInput' type='text' placeholder='Enter your name' required />
-                <label htmlFor='emailInput'>Email</label>
-                <input id='emailInput' type='text' placeholder='Enter your email' required />
-                <label id='passwordLabel' htmlFor='passwordInput'>
+                <input id='firstNameInput' type='text' placeholder='Enter your name' required autoComplete='off' />
+                <label htmlFor='newEmailInput'>Email</label>
+                <input id='newEmailInput' type='text' placeholder='Enter your email' required autoComplete='off' />
+                <label id='newPasswordLabel' htmlFor='passwordInput'>
                     Password
                     {showType === 'password' ?
-                        <button id='showPassword' type='button' onClick={() => setShowType('text')}><BiShow size={16} /></button> :
-                        <button id='hidePassword' type='button' onClick={() => setShowType('password')}><BiHide size={16} /></button>
+                        <button className='show-hide-password' type='button' onClick={() => setShowType('text')}>
+                            <BiShow size={16} />
+                        </button> :
+                        <button className='show-hide-password' type='button' onClick={() => setShowType('password')}>
+                            <BiHide size={16} />
+                        </button>
                     }
                 </label>
-                <input id='passwordInput' type={showType} placeholder='Enter a password' required />
-                <label htmlFor='currentBookInput'>Current Read</label>
-                <div className='signup-search-container'>
-                    <input id='currentBookInput' type='search' placeholder='Add your current read (optional)' />
-                    <button id='signupSearch' type='button' onClick={() => {}}><BiSearch size={18} /></button>
-                </div>
-                <input id='signupButton' type='submit' value='Sign Up' />
+                <input id='newPasswordInput' type={showType} placeholder='Enter a password' required />
+                <button className='submit-btn' id='signupButton' type='button' onClick={onSubmit}>Sign Up</button>
             </form>
         </div>
     )

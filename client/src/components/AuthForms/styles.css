@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 
-.signup-container {
+.auth-form-container {
     margin: auto;
     background-color: white;
     border: 2px solid var(--red);
@@ -19,7 +19,7 @@
     height: max-content;
 }
 
-.create-account {
+.form-title {
     font-size: clamp(1.5rem, 5vw, 2rem);
     padding: 1rem;
     text-align: center;
@@ -36,17 +36,17 @@
     border: none;
 }
 
-#signupForm {
+.auth-form {
     display: grid;
     padding: 2rem;
 }
 
-#signupForm label {
+.auth-form label {
     margin-bottom: 0.25rem;
     font-size: 1rem;
 }
 
-#signupForm input {
+.auth-form input {
     margin-bottom: 1rem;
     height: 1.75rem;
     padding: 0.25rem;
@@ -54,35 +54,24 @@
     border: 1px solid var(--red);
 }
 
- #signupForm input:focus {
+.auth-form input:focus {
     outline: none;
     border-bottom: 2px solid var(--red);
 }
 
-#showPassword, #hidePassword {
+.show-hide-password {
     background: none;
     border: none;
     display: flex;
 }
 
-#passwordLabel {
+#passwordLabel, #newPasswordLabel {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.signup-search-container {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-#signupForm #currentBookInput {
-    flex-basis: 100%;
-    margin-bottom: 0;
-}
-
-#signupForm #signupButton {
+.auth-form .submit-btn {
     background: none;
     font-size: 1rem;
     max-width: 15rem;
@@ -92,16 +81,10 @@
     height: max-content;
     cursor: pointer;
     margin: 0;
+    border: 1px solid var(--red);
 }
 
-#signupForm #signupButton:hover {
+.auth-form .submit-btn:hover {
     background-color: var(--red);
     color: white;
-}
-
-#signupSearch {
-    border: 1px solid black;
-    background: none;
-    display: flex;
-    align-items: center;
 }

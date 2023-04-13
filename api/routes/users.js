@@ -1,7 +1,9 @@
 const express = require('express')
+const passport = require('../../utils/passport')
 const db = require('../db/connect')
+const { hashPassword } = require('../../utils/authenticate')
 
-const router = express()
+const router = express.Router()
 
 // Get user
 // router.get('/user/:id', async (req, res) => {
@@ -13,13 +15,31 @@ const router = express()
 //     else res.send(result).status(200);
 // })
 
+// Login User
+router.post('/login', passport.authenticate('local'), (req, res) => {
+    if (req.user) {
+        res.json({
+            name: req.user.name,
+            email: req.user.email,
+            books: req.user.books,
+            words: req.user.words
+        })
+    }
+})
+
 // Add user
 router.post('/signup', async (req, res) => {
     let collection = await db.collection('users')
-    let newDocument = req.body
-    newDocument.date = new Date()
-    let result = await collection.insertOne(newDocument)
-    res.send(result).status(204)
+    let user = { ...req.body, books: [], words: [] }
+    user.date = new Date()
+    user.password = hashPassword(user.password)
+    let result = await collection.insertOne(user)
+    if (result.acknowledged) {
+        res.json({
+            email: user.email,
+            password: req.body.password
+        })
+    }
 })
 
 // Update user
