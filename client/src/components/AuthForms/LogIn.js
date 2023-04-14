@@ -5,20 +5,38 @@ import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { BiShow, BiHide } from 'react-icons/bi'
 import { setLoginOpen } from '../../slices/AuthSlice'
 import { login } from '../../utils/userAccount'
+import { AuthError } from '../Errors'
 import './styles.css'
 
 const LogInForm = () => {
     const [showType, setShowType] = useState('password')
+    const [error, setError] = useState({})
     useSelector(state => state.auth.loginOpen)
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const onSubmit = () => {
-        login({
+    const onSubmit = async () => {
+        await login({
             email: document.getElementById('emailInput').value,
             password: document.getElementById('passwordInput').value,
+        }).then((res) => {
+            if (!res) {
+                setError({ message: 'An unexpected error occured' })
+            } else if (res.message === 'Incorrect email') {
+                setError({
+                    message: 'An account with that email doesn\'t exist.',
+                    action: 'signup',
+                    actionText: 'Create account'
+                })
+            } else if (res.message === 'Incorrect password') {
+                setError({
+                    message: 'Incorrect password',
+                })
+            } else {
+                dispatch(setLoginOpen(false))
+                navigate('/home')
+            }
         })
-        navigate('/home')
     }
 
     return (
@@ -30,6 +48,8 @@ const LogInForm = () => {
                 <AiOutlineCloseCircle size={20} />
             </button>
             <form className='auth-form' id='loginForm'>
+            {error.message &&
+                    <AuthError action={{ action: error.action, text: error.actionText }}>{error.message}</AuthError>}
                 <label htmlFor='emailInput'>Email</label>
                 <input id='emailInput' type='text' placeholder='Enter your email' required autoComplete='off' />
                 <label id='passwordLabel' htmlFor='passwordInput'>

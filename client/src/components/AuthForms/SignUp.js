@@ -5,10 +5,12 @@ import { setSignupOpen } from '../../slices/AuthSlice'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { BiShow, BiHide } from 'react-icons/bi'
 import { login } from '../../utils/userAccount'
+import { AuthError } from '../Errors'
 import './styles.css'
 
 const SignUpForm = () => {
     const [showType, setShowType] = useState('password')
+    const [error, setError] = useState({})
     useSelector(state => state.auth.signupOpen)
     const dispatch = useDispatch()
     const naviagte = useNavigate()
@@ -27,11 +29,31 @@ const SignUpForm = () => {
                 books: [],
                 words: []
             })
-        }).then(response => response.json())
-        .then((body) => {
-                login(body)
-                naviagte('home')
-        }); 
+        }).then((response) => {
+            if (!response.ok) {
+                setError({ message: 'An unexpected error occured' })
+            } else {
+                return response.json()
+            }
+        }).then(async (body) => {
+            if (body?.message) {
+                setError({
+                    message: 'An account with that email already exists',
+                    action: 'login',
+                    actionText: 'Log in'
+                })
+            } else {
+                await login(body)
+                    .then((res) => {
+                        if (!res) {
+                            setError({ message: 'An unexpected error occured' })
+                        } else {
+                            dispatch(setSignupOpen(false))
+                            naviagte('/home')
+                        }
+                    })
+            }
+        });
     }
 
     return (
@@ -43,6 +65,8 @@ const SignUpForm = () => {
                 <AiOutlineCloseCircle size={20} />
             </button>
             <form className='auth-form' id='signupForm'>
+                {error.message &&
+                    <AuthError action={{ action: error.action, text: error.actionText }}>{error.message}</AuthError>}
                 <label htmlFor='firstNameInput'>First Name</label>
                 <input id='firstNameInput' type='text' placeholder='Enter your name' required autoComplete='off' />
                 <label htmlFor='newEmailInput'>Email</label>

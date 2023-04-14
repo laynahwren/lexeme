@@ -16,29 +16,46 @@ const router = express.Router()
 // })
 
 // Login User
-router.post('/login', passport.authenticate('local'), (req, res) => {
-    if (req.user) {
-        res.json({
-            name: req.user.name,
-            email: req.user.email,
-            books: req.user.books,
-            words: req.user.words
-        })
-    }
+router.post('/login', function (req, res) {
+    passport.authenticate('local', function (err, user, info) {
+        if (user) {
+            res.json({
+                name: user.name,
+                email: user.email,
+                books: user.books,
+                words: user.words
+            })
+        } else if (err) {
+            res.send(err)
+        } else {
+            res.send(info)
+        }
+    })(req, res)
 })
 
 // Add user
 router.post('/signup', async (req, res) => {
-    let collection = await db.collection('users')
-    let user = { ...req.body, books: [], words: [] }
-    user.date = new Date()
-    user.password = hashPassword(user.password)
-    let result = await collection.insertOne(user)
-    if (result.acknowledged) {
-        res.json({
-            email: user.email,
-            password: req.body.password
-        })
+    try {
+        let collection = await db.collection('users')
+        let user = { ...req.body, books: [], words: [] }
+        let result = await collection.findOne({ email: user.email })
+        if (result) {
+            res.json({
+                message: 'Exisitng user'
+            })
+        } else {
+            user.date = new Date()
+            user.password = hashPassword(user.password)
+            result = await collection.insertOne(user)
+            if (result.acknowledged) {
+                res.json({
+                    email: user.email,
+                    password: req.body.password
+                })
+            }
+        }
+    } catch (err) {
+        res.send(err)
     }
 })
 
