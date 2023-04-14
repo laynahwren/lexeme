@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { setSignupOpen } from '../../slices/AuthSlice'
+import { setUser } from '../../slices/UserSlice'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { BiShow, BiHide } from 'react-icons/bi'
 import { login } from '../../utils/userAccount'
@@ -49,6 +50,7 @@ const SignUpForm = () => {
                             setError({ message: 'An unexpected error occured' })
                         } else {
                             dispatch(setSignupOpen(false))
+                            dispatch(setUser(res))
                             naviagte('/home')
                         }
                     })

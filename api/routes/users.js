@@ -15,15 +15,30 @@ const router = express.Router()
 //     else res.send(result).status(200);
 // })
 
+// Check user
+router.get('/logged-in', (req, res) => {
+    if (req.user) {
+        res.send(true)
+    } else {
+        res.send(false)
+    }
+})
+
 // Login User
 router.post('/login', function (req, res) {
     passport.authenticate('local', function (err, user, info) {
         if (user) {
-            res.json({
-                name: user.name,
-                email: user.email,
-                books: user.books,
-                words: user.words
+            req.login(user, (err) => {
+                if (err) {
+                    res.send(err)
+                } else {
+                    res.json({
+                        name: user.name,
+                        email: user.email,
+                        books: user.books,
+                        words: user.words
+                    })
+                }
             })
         } else if (err) {
             res.send(err)

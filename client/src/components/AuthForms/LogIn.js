@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { BiShow, BiHide } from 'react-icons/bi'
 import { setLoginOpen } from '../../slices/AuthSlice'
+import { setUser } from '../../slices/UserSlice'
 import { login } from '../../utils/userAccount'
 import { AuthError } from '../Errors'
 import './styles.css'
@@ -34,6 +35,7 @@ const LogInForm = () => {
                 })
             } else {
                 dispatch(setLoginOpen(false))
+                dispatch(setUser(res))
                 navigate('/home')
             }
         })

@@ -5,3 +5,8 @@ export const login = async (creds) => {
     .catch((err) => {return err})
     return response.data
 }
+
+export const checkLoggedIn = async () => {
+    const response = await axios.get('/auth/logged-in')
+    return response.data
+}
