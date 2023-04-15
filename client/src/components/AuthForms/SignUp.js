@@ -16,6 +16,7 @@ const SignUpForm = () => {
     const dispatch = useDispatch()
     const naviagte = useNavigate()
 
+    // Move fetch to axios in userAccount.js
     const onSubmit = async () => {
         await fetch('/auth/signup', {
             method: 'POST',

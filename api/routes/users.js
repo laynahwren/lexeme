@@ -74,6 +74,17 @@ router.post('/signup', async (req, res) => {
     }
 })
 
+// Logout user
+router.post('/logout', (req, res) => {
+    req.logout((err) => {
+        if (err) {
+            res.send(err)
+        } else {
+            res.send(true)
+        }
+    })
+})
+
 // Update user
 
 // Delete user

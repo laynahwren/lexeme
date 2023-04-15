@@ -4,7 +4,9 @@ import { useDispatch } from 'react-redux'
 import { checkLoggedIn } from './utils/userAccount'
 import { setUser } from './slices/UserSlice'
 import LandingPage from './containers/LandingPage/LandingPage'
-import { HomePage } from './containers/HomePage/Home'
+import HomePage from './containers/HomePage/Home'
+import Library from './containers/Library/Library'
+import Lexicon from './containers/Lexicon/Lexicon'
 import './App.css'
 
 function App() {
@@ -32,6 +34,8 @@ function App() {
       <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path='/home' element={<HomePage />} />
+        <Route path='/library' element={<Library />} />
+        <Route path='/lexicon' element={<Lexicon />} />
       </Routes>
     </div>
   );

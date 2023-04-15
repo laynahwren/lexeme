@@ -10,3 +10,9 @@ export const checkLoggedIn = async () => {
     const response = await axios.get('/auth/logged-in')
     return response.data
 }
+
+export const logout = async () => {
+    const response = await axios.post('/auth/logout')
+    .catch((err) => {return err})
+    return response.data
+}
