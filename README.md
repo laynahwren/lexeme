@@ -12,9 +12,10 @@ WIP App deployed on Heroku: [https://lexeme.herokuapp.com/](https://lexeme.herok
 
 ### Current Technologies
 - React
+- HTML
+- CSS
+- JavaScript
 - NodeJS
 - Express
 - Axios
-- JavaScript
-- HTML
-- CSS
+- Passport
