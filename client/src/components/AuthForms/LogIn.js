@@ -42,11 +42,11 @@ const LogInForm = () => {
     }
 
     return (
-        <div className='auth-form-container'>
+        <div className='dialogue-container'>
             <div className='form-title'>
                 Welcome Back
             </div>
-            <button id='closeBtn' onClick={() => dispatch(setLoginOpen(false))}>
+            <button className='close-btn' onClick={() => dispatch(setLoginOpen(false))}>
                 <AiOutlineCloseCircle size={20} />
             </button>
             <form className='auth-form' id='loginForm'>

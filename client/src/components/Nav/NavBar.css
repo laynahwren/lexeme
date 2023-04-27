@@ -24,6 +24,10 @@ a.nav-active {
     position: relative;
 }
 
+#userMenuBtn svg {
+    color: black;
+}
+
 .user-menu {
     position: absolute;
     right: 0;

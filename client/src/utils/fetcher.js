@@ -11,9 +11,9 @@ export const fetchBook = (params) => {
 }
 
 // Get word
-export const fetchWord = (params) => {
-    axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${params}`)
-        .then(function (response) {
-            console.log(response.data)
+export const fetchWord = (word) => {
+    return axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+        .then((res) => {
+            return res.data
         })
 }

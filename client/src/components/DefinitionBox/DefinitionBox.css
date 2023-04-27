@@ -1,0 +1,106 @@
+@import '../../globals/globals.css';
+
+.definition-box-title {
+    font-size: clamp(1rem, 5vw, 1.5rem);
+    padding: 0.5rem;
+    background-color: var(--red);
+    color: white;
+}
+
+.definitions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 30rem;
+    padding: 0.75rem;
+    overflow-y: auto;
+}
+
+.part-of-speech-title {
+    font-weight: bold;
+}
+
+.definition-options {
+    border: 2px solid var(--red);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: clamp(0.75rem, 5vw, 1rem);
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    background-color: white;
+    margin: 0;
+    font-size: inherit;
+    color: black;
+    min-width: 1rem;
+    height: 1rem;
+    border: 1px solid black;
+    display: grid;
+    place-content: center;
+    transform: translateY(0.075rem);
+}
+
+input[type="checkbox"]:hover {
+    cursor: pointer;
+}
+
+input[type="checkbox"]:disabled {
+    border: 1px solid gray;
+}
+
+input[type="checkbox"]:disabled:hover {
+    cursor: default;
+}
+
+input[type="checkbox"]::before {
+    content: "";
+    width: 0.65rem;
+    height: 0.65rem;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1rem 1rem white;
+    transform-origin: bottom left;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+input[type="checkbox"]:checked {
+    border: 1px solid var(--red);
+    background-color: var(--red);
+}
+
+input[type="checkbox"]:checked::before {
+    transform: scale(1);
+}
+
+.definition-selection {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.definition-selection label {
+    width: fit-content;
+}
+
+.add-word-container {
+    background-color: var(--red);
+    padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.add-word-container button {
+    background: none;
+    border: 1px solid white;
+    color: white;
+    padding: 0.5rem;
+    font-size: clamp(0.75rem, 5vw, 1rem);
+    border-radius: 5px;
+}
+
+.add-word-container button:hover {
+    background-color: white;
+    color: var(--red);
+}

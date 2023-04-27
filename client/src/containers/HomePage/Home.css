@@ -36,9 +36,8 @@
     font-size: 1.25rem;
 }
 
-.word-search-container {
+.home-search-container {
     width: clamp(20rem, 50vw, 50rem);
-    margin-bottom: 4rem;
 }
 
 .search-title {
@@ -47,6 +46,7 @@
 
 .book-term {
     font-size: clamp(0.75rem, 5vw, 1rem);
+    margin-bottom: 4rem;
 }
 
 .book-term button {
@@ -58,7 +58,7 @@
     padding: 0;
 }
 
-.word-search-container input {
+.home-search-container input {
     height: 2rem;
     padding: 0.25rem;
     font-size: 1rem;
@@ -66,18 +66,18 @@
     width: 100%;
 }
 
-.word-search-container input:focus {
+.home-search-container input:focus {
     outline: none;
     border-bottom: 2px solid var(--red);
 }
 
-.word-search {
+.home-search {
     display: flex;
     gap: 0.5rem;
     padding: 0.5rem 0;
 }
 
-#wordSearchBtn {
+.home-search-btn {
     background-color: var(--red);
     color: white;
     border: none;

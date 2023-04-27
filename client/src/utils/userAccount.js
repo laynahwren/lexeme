@@ -6,6 +6,12 @@ export const login = async (creds) => {
     return response.data
 }
 
+export const signup = async (params) => {
+    const response =  await axios.post('/auth/signup', params)
+    .catch((err) => { return err})
+    return response.data
+}
+
 export const checkLoggedIn = async () => {
     const response = await axios.get('/auth/logged-in')
     return response.data

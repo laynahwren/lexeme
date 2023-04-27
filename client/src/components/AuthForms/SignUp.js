@@ -5,7 +5,7 @@ import { setSignupOpen } from '../../slices/AuthSlice'
 import { setUser } from '../../slices/UserSlice'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { BiShow, BiHide } from 'react-icons/bi'
-import { login } from '../../utils/userAccount'
+import { login, signup } from '../../utils/userAccount'
 import { AuthError } from '../Errors'
 import './styles.css'
 
@@ -16,55 +16,44 @@ const SignUpForm = () => {
     const dispatch = useDispatch()
     const naviagte = useNavigate()
 
-    // Move fetch to axios in userAccount.js
     const onSubmit = async () => {
-        await fetch('/auth/signup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                name: document.getElementById('firstNameInput').value,
-                email: document.getElementById('newEmailInput').value,
-                password: document.getElementById('newPasswordInput').value,
-                books: [],
-                words: []
-            })
-        }).then((response) => {
-            if (!response.ok) {
-                setError({ message: 'An unexpected error occured' })
-            } else {
-                return response.json()
-            }
-        }).then(async (body) => {
-            if (body?.message) {
-                setError({
-                    message: 'An account with that email already exists',
-                    action: 'login',
-                    actionText: 'Log in'
-                })
-            } else {
-                await login(body)
-                    .then((res) => {
-                        if (!res) {
-                            setError({ message: 'An unexpected error occured' })
-                        } else {
-                            dispatch(setSignupOpen(false))
-                            dispatch(setUser(res))
-                            naviagte('/home')
-                        }
+        await signup({
+            name: document.getElementById('firstNameInput').value,
+            email: document.getElementById('newEmailInput').value,
+            password: document.getElementById('newPasswordInput').value,
+            books: [],
+            words: []
+        })
+            .then(async (res) => {
+                if (!res) {
+                    setError({ message: 'An unexpected error occured' })
+                } else if (res.message === 'Existing user') {
+                    setError({
+                        message: 'An account with that email already exists',
+                        action: 'login',
+                        actionText: 'Log in'
                     })
-            }
-        });
+                } else {
+                    await login(res)
+                        .then((res) => {
+                            if (!res) {
+                                setError({ message: 'An unexpected error occured' })
+                            } else {
+                                dispatch(setSignupOpen(false))
+                                dispatch(setUser(res))
+                                naviagte('/home')
+                            }
+                        })
+                    }
+            })
     }
 
     return (
-        <div className='auth-form-container'>
+        <div className='dialogue-container'>
             <div className='form-title'>
                 Create an Account
             </div>
-            <button id='closeBtn' onClick={() => dispatch(setSignupOpen(false))}>
+            <button className='close-btn' onClick={() => dispatch(setSignupOpen(false))}>
                 <AiOutlineCloseCircle size={20} />
             </button>
             <form className='auth-form' id='signupForm'>

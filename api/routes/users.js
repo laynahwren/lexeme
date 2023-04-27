@@ -56,7 +56,7 @@ router.post('/signup', async (req, res) => {
         let result = await collection.findOne({ email: user.email })
         if (result) {
             res.json({
-                message: 'Exisitng user'
+                message: 'Existing user'
             })
         } else {
             user.date = new Date()
