@@ -50,7 +50,7 @@ const HomePage = () => {
                     {!showBookSearch ? <button id='addCurrBookBtn' onClick={() => setShowBookSearch(true)}><IoIosAddCircleOutline size={50} /></button> :
                         <div className='home-search-container'>
                             <div className='home-search'>
-                                <input type='text' placeholder='Searh for a book' />
+                                <input type='text' placeholder='Search for a book' />
                                 <button className='home-search-btn'><BsSearch size={20} /></button>
                             </div>
                         </div>
