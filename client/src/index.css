@@ -4,6 +4,8 @@ body {
   font-family: 'Raleway', sans-serif;
   margin: 0;
   box-sizing: border-box;
+  height: 100vh;
+  max-height: -webkit-fill-available;
 }
 
 body button:hover {
