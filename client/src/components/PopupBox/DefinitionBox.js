@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { useSelector, useDispatch } from 'react-redux'
 import { setDefinition, setDefinitionOpen } from '../../slices/DefinitionSlice'
-import './DefinitionBox.css'
+import './PopupBox.css'
 
 const DefinitionBox = () => {
     const definition = useSelector(state => state.definition)
@@ -46,17 +46,17 @@ const DefinitionBox = () => {
 
     return (
         <div className='dialogue-container'>
-            <div className='definition-box-title'>
+            <div className='popup-box-title'>
                 {definition.definition.word}
             </div>
             <button className='close-btn' onClick={onClose}>
                 <AiOutlineCloseCircle size={20} />
             </button>
-            <div className='definitions-container'>
+            <div className='items-container'>
                 {definition.definition.meanings.map((def) => { return getDefinitions(def) })}
             </div>
             {chosenDefinition.word &&
-                <div className='add-word-container'>
+                <div className='add-item-container'>
                     <button id='addToReadBtn'>Add to Current Read</button>
                     <button id='addToLexiconBtn'>Add to Lexicon</button>
                 </div>

@@ -13,6 +13,7 @@ import {
 import authReducer from './slices/AuthSlice'
 import userReducer from './slices/UserSlice'
 import definitionReducer from './slices/DefinitionSlice'
+import bookPopupReducer from './slices/BookPopupSlice'
 
 const persistConfig = {
   key: 'root',
@@ -23,7 +24,8 @@ const persistConfig = {
 const reducers = combineReducers({
   auth: authReducer,
   user: userReducer,
-  definition: definitionReducer
+  definition: definitionReducer,
+  bookPopup: bookPopupReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, reducers)

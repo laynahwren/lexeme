@@ -1,13 +1,13 @@
 @import '../../globals/globals.css';
 
-.definition-box-title {
+.popup-box-title {
     font-size: clamp(1rem, 5vw, 1.5rem);
     padding: 0.5rem;
     background-color: var(--red);
     color: white;
 }
 
-.definitions-container {
+.items-container {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -83,7 +83,7 @@ input[type="checkbox"]:checked::before {
     width: fit-content;
 }
 
-.add-word-container {
+.add-item-container {
     background-color: var(--red);
     padding: 0.5rem;
     display: flex;
@@ -91,7 +91,7 @@ input[type="checkbox"]:checked::before {
     gap: 1rem;
 }
 
-.add-word-container button {
+.add-item-container button {
     background: none;
     border: 1px solid white;
     color: white;
@@ -100,7 +100,42 @@ input[type="checkbox"]:checked::before {
     border-radius: 5px;
 }
 
-.add-word-container button:hover {
+.add-item-container button:hover {
     background-color: white;
     color: var(--red);
+}
+
+.book-res-container {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-bottom: solid 2px var(--red);
+    font-size: clamp(0.75rem, 5vw, 1rem);
+}
+
+.book-res-container img {
+    height: fit-content;
+}
+
+.book-res-container:last-child {
+    border: none;
+}
+
+.book-res-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-left: 0.5rem;
+    border-left: dotted 2px var(--red);
+}
+
+.book-res-title {
+    font-weight: bold;
+}
+
+.book-res-description {
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    display: -webkit-box;
+    overflow: hidden;
 }

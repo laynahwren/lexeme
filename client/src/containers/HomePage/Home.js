@@ -4,24 +4,37 @@ import { useSelector, useDispatch } from 'react-redux'
 import LexemeIcon from '../../assets/LexemeIcon.png'
 import { BsSearch } from 'react-icons/bs'
 import { IoIosAddCircleOutline } from 'react-icons/io'
-import { fetchWord } from '../../utils/fetcher'
+import { fetchWord, fetchBook } from '../../utils/fetcher'
 import { setDefinition, setDefinitionOpen } from '../../slices/DefinitionSlice'
+import { setPopupOpen, setBookSearch, setBooks } from '../../slices/BookPopupSlice'
 import NavBar from '../../components/Nav/NavBar'
-import DefinitionBox from '../../components/DefinitionBox/DefinitionBox'
+import DefinitionBox from '../../components/PopupBox/DefinitionBox'
+import BookBox from '../../components/PopupBox/BookBox'
 import './Home.css'
 
 const HomePage = () => {
     const user = useSelector(state => state.user)
     const { definitionOpen } = useSelector(state => state.definition)
+    const { popupOpen } = useSelector(state => state.bookPopup)
     const [searchWord, setSearchWord] = useState('')
+    const [searchBook, setSearchBook] = useState('')
     const [showBookSearch, setShowBookSearch] = useState(false)
     const dispatch = useDispatch()
 
-    const onSearch = async () => {
+    const onWordSearch = async () => {
         const def = await fetchWord(searchWord)
         dispatch(setDefinition(def[0]))
         dispatch(setDefinitionOpen(true))
         setSearchWord('')
+    }
+
+    const onBookSearch = async () => {
+        dispatch(setBookSearch(searchBook))
+        const book = searchBook.toLowerCase().split(' ').join('+')
+        const bookRes = await fetchBook(book)
+        dispatch(setBooks(bookRes.items))
+        dispatch(setPopupOpen(true))
+        setSearchBook('')
     }
 
     return (user.name ?
@@ -39,7 +52,7 @@ const HomePage = () => {
                     <div className='search-title'>Add to Your Lexicon</div>
                     <div className='home-search'>
                         <input type='text' placeholder='Search for a word' value={searchWord} onChange={(e) => setSearchWord(e.target.value)} />
-                        <button className='home-search-btn' onClick={onSearch}><BsSearch size={20} /></button>
+                        <button className='home-search-btn' onClick={onWordSearch}><BsSearch size={20} /></button>
                     </div>
                     <div className='book-term'>Book term? <button>Enter definition manually</button></div>
                 </div>
@@ -50,8 +63,8 @@ const HomePage = () => {
                     {!showBookSearch ? <button id='addCurrBookBtn' onClick={() => setShowBookSearch(true)}><IoIosAddCircleOutline size={50} /></button> :
                         <div className='home-search-container'>
                             <div className='home-search'>
-                                <input type='text' placeholder='Search for a book' />
-                                <button className='home-search-btn'><BsSearch size={20} /></button>
+                                <input type='text' placeholder='Enter book title' value={searchBook} onChange={(e) => setSearchBook(e.target.value)} />
+                                <button className='home-search-btn'><BsSearch size={20} onClick={onBookSearch} /></button>
                             </div>
                         </div>
                     }
@@ -59,6 +72,7 @@ const HomePage = () => {
                 </div>
             </div>
             {definitionOpen && <DefinitionBox />}
+            {popupOpen && <BookBox />}
         </>
         : <Navigate to='/' />)
 }
