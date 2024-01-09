@@ -9,6 +9,7 @@ const Lexicon = () => {
     return (user.name ?
         <>
             <NavBar />
+            <div className='page-title'>{user.name}'s<span> Lexicon</span></div>
         </> :
         <Navigate to='/' />
     )

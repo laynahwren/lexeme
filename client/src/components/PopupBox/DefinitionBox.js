@@ -15,6 +15,7 @@ const DefinitionBox = () => {
     }
 
     const onCheck = (e, item, pos) => {
+        // Defintion needs reformatting before it can be saved to user
         if (e.target.checked) {
             setChosenDefinition({
                 word: definition.definition.word,
@@ -30,16 +31,31 @@ const DefinitionBox = () => {
         return (
             <fieldset className='definition-options'>
                 <legend className='part-of-speech-title'>{def.partOfSpeech}</legend>
-                {def.definitions.map((item, index) => {
-                    return (
-                        <div className='definition-selection'>
-                            <input type='checkbox' id={`${def.partOfSpeech}-${index}`}
-                                disabled={chosenDefinition.word && chosenDefinition.definition !== item.definition}
-                                onChange={(e) => onCheck(e, item, def.partOfSpeech)} />
-                            <label htmlFor={`${def.partOfSpeech}-${index}`}>{item.definition}</label>
-                        </div>
-                    )
-                })}
+                {def.synonyms.length ?
+                    <section className='item-info-section'>
+                        <div className='items-title'>Synonyms</div>
+                        <>{def.synonyms.join(', ')}</>
+                    </section> : null
+                }
+                {def.antonyms.length ?
+                    <section className='item-info-section'>
+                        <div className='items-title'>Antonyms</div>
+                        <>{def.antonyms.join(', ')}</>
+                    </section> : null
+                }
+                <section className='definition-section'>
+                    <div className='items-title'>Defintions</div>
+                    {def.definitions.map((item, index) => {
+                        return (
+                            <div className='definition-selection'>
+                                <input type='checkbox' id={`${def.partOfSpeech}-${index}`}
+                                    disabled={chosenDefinition.word && chosenDefinition.definition !== item.definition}
+                                    onChange={(e) => onCheck(e, item, def.partOfSpeech)} />
+                                <label htmlFor={`${def.partOfSpeech}-${index}`}>{item.definition}</label>
+                            </div>
+                        )
+                    })}
+                </section>
             </fieldset>
         )
     }

@@ -42,7 +42,7 @@ const HomePage = () => {
             <NavBar />
             <div className='home-container'>
                 <img id='homeIcon' src={LexemeIcon} alt='Lexeme icon' />
-                <div className='welcome'>Welcome, <span>{user.name}</span></div>
+                <div className='page-title'>Welcome, <span>{user.name}</span></div>
                 <div className='user-summary'>
                     Lexicon:<span>{user.words.length}</span>words
                     <span>|</span>

@@ -5,6 +5,16 @@
   padding: 1rem;
 }
 
+.page-title {
+  font-size: clamp(1.5rem, 10vw, 2.5rem);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.page-title span {
+  color: var(--red);
+}
+
 .dialogue-container {
   margin: auto;
   background-color: white;
