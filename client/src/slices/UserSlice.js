@@ -6,7 +6,8 @@ export const userSlice = createSlice({
         name: null,
         email: null,
         books: [],
-        words: []
+        words: [],
+        currentRead: null
     },
     reducers: {
         setUser: (state, action) => {
@@ -15,6 +16,7 @@ export const userSlice = createSlice({
             state.email = data.email
             state.books = [ ...data.books ]
             state.words = [ ...data.words ]
+            state.currentRead = data.currentRead
         }
     }
 })

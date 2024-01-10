@@ -36,7 +36,8 @@ router.post('/login', function (req, res) {
                         name: user.name,
                         email: user.email,
                         books: user.books,
-                        words: user.words
+                        words: user.words,
+                        currentRead: user.currentRead
                     })
                 }
             })
@@ -52,7 +53,7 @@ router.post('/login', function (req, res) {
 router.post('/signup', async (req, res) => {
     try {
         let collection = await db.collection('users')
-        let user = { ...req.body, books: [], words: [] }
+        let user = { ...req.body, books: [], words: [], currentRead: null }
         let result = await collection.findOne({ email: user.email })
         if (result) {
             res.json({

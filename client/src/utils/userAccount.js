@@ -22,3 +22,13 @@ export const logout = async () => {
     .catch((err) => {return err})
     return response.data
 }
+
+export const updateLibrary = async (params) => {
+    const response = await axios.put('/api/library', params)
+    return response.data
+}
+
+export const updateCurrentRead = async (params) => {
+    const response = await axios.put('/api/currentRead', params)
+    return response.data
+}

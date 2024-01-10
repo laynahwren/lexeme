@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import LexemeIcon from '../../assets/LexemeIcon.png'
 import { BsSearch } from 'react-icons/bs'
 import { IoIosAddCircleOutline } from 'react-icons/io'
-import { fetchWord, fetchBook } from '../../utils/fetcher'
+import { fetchWord, fetchBookByTitle } from '../../utils/fetcher'
 import { setDefinition, setDefinitionOpen } from '../../slices/DefinitionSlice'
 import { setPopupOpen, setBookSearch, setBooks } from '../../slices/BookPopupSlice'
 import NavBar from '../../components/Nav/NavBar'
@@ -31,7 +31,7 @@ const HomePage = () => {
     const onBookSearch = async () => {
         dispatch(setBookSearch(searchBook))
         const book = searchBook.toLowerCase().split(' ').join('+')
-        const bookRes = await fetchBook(book)
+        const bookRes = await fetchBookByTitle(book)
         dispatch(setBooks(bookRes.items))
         dispatch(setPopupOpen(true))
         setSearchBook('')
