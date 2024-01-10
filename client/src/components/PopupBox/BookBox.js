@@ -34,7 +34,7 @@ const BookBox = () => {
             res2 = await updateCurrentRead({ 'isbn': isbn })
         }
 
-        dispatch(setUser({ ...user, books: res.value.books, currentRead: res2.value ? res2.value.currentRead : user.currentRead }))
+        dispatch(setUser({ ...user, books: res.value.books, currentRead: res2 ? res2.value.currentRead : user.currentRead }))
 
         onClose()
     }
