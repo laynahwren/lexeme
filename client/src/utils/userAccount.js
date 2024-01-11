@@ -32,3 +32,8 @@ export const updateCurrentRead = async (params) => {
     const response = await axios.put('/api/currentRead', params)
     return response.data
 }
+
+export const updateLexicon = async (params) => {
+    const response = await axios.put('/api/lexicon', params)
+    return response.data
+}

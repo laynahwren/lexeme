@@ -122,6 +122,12 @@ input[type="checkbox"]:checked::before {
     color: var(--red);
 }
 
+.add-item-container button:disabled {
+    background-color: white;
+    color: darkgray;
+    cursor: auto;
+}
+
 .book-res-container {
     display: flex;
     gap: 0.5rem;

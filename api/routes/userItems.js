@@ -37,8 +37,39 @@ router.put('/currentRead', async (req, res) => {
 })
 
 // Update user lexicon
-router.put('/lexicon', (req, res) => {
+router.put('/lexicon', async (req, res) => {
+    try {
+        let collection = await db.collection('users')
+        let finalResult
+        await collection.findOne({ "_id": new ObjectId(req.user) })
+            .then(async (result) => {
+                if (result.words.find(item => item.word === req.body.word) === undefined) {
+                    finalResult = await collection.findOneAndUpdate(
+                        { "_id": new ObjectId(req.user) },
+                        { '$set': { words: [...result.words, req.body] } },
+                        { returnDocument: 'after' })
+                }
 
+                // Need to handle duplicate case
+
+                // } else {
+                //     let index = result.words.findIndex(item => item.word === req.body.word)
+                //     let newEntry = { ...result.words[index], meanings: [...result.words[index].meanings, ...req.body.meanings] }
+                //     console.log(newEntry)
+                //     finalResult = await collection.findOneAndUpdate(
+                //         { "_id": new ObjectId(req.user) },
+                //         { '$set': { words: result.words.toSpliced(index, 1, newEntry) } },
+                //         { returnDocument: 'after' })
+                // }
+                
+                if (finalResult) {
+                    res.send(finalResult)
+                }
+            }
+            )
+    } catch (err) {
+        res.send(err)
+    }
 })
 
 module.exports = router

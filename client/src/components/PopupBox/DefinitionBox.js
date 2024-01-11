@@ -2,11 +2,14 @@ import { useState } from 'react'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { useSelector, useDispatch } from 'react-redux'
 import { setDefinition, setDefinitionOpen } from '../../slices/DefinitionSlice'
+import { updateLexicon } from '../../utils/userAccount'
+import { setUser } from '../../slices/UserSlice'
 import './PopupBox.css'
 
 const DefinitionBox = () => {
     const definition = useSelector(state => state.definition)
-    const [chosenDefinition, setChosenDefinition] = useState({})
+    const user = useSelector(state => state.user)
+    const [chosenDefinitions, setChosenDefinitions] = useState([])
     const dispatch = useDispatch()
 
     const onClose = () => {
@@ -14,16 +17,55 @@ const DefinitionBox = () => {
         dispatch(setDefinitionOpen(false))
     }
 
+    const addToLexicon = async () => {
+        let res = await updateLexicon({word: definition.definition.word, meanings: chosenDefinitions})
+
+        dispatch(setUser({ ...user, words: res.value.words }))
+
+        onClose()
+    }
+
     const onCheck = (e, item, pos) => {
         // Defintion needs reformatting before it can be saved to user
         if (e.target.checked) {
-            setChosenDefinition({
-                word: definition.definition.word,
-                partOfSpeech: pos,
-                definition: item.definition
-            })
+            addDefinition(item, pos)
         } else {
-            setChosenDefinition({})
+            deleteDefinition(item, pos)
+        }
+    }
+
+    const addDefinition = (item, pos) => {
+        let currPos = chosenDefinitions.findIndex((def) => def.partOfSpeech === pos)
+        if (currPos !== -1) {
+            let newDefs = {
+                ...chosenDefinitions[currPos],
+                definitions: [...chosenDefinitions[currPos].definitions, { definition: item.definition }]
+            }
+            setChosenDefinitions(chosenDefinitions.toSpliced(currPos, 1, newDefs))
+        } else {
+            setChosenDefinitions([...chosenDefinitions,
+            {
+                partOfSpeech: pos,
+                definitions: [
+                    {
+                        definition: item.definition
+                    }
+                ]
+            }])
+        }
+    }
+
+    const deleteDefinition = (item, pos) => {
+        let currPos = chosenDefinitions.findIndex((def) => def.partOfSpeech === pos)
+        if (chosenDefinitions[currPos].definitions.length > 1) {
+            let currDef = chosenDefinitions[currPos].definitions.findIndex(def => def.definition === item.definition)
+            let newDefs = {
+                ...chosenDefinitions[currPos],
+                definitions: [...chosenDefinitions[currPos].definitions.toSpliced(currDef, 1)]
+            }
+            setChosenDefinitions(chosenDefinitions.toSpliced(currPos, 1, newDefs))
+        } else {
+            setChosenDefinitions(chosenDefinitions.toSpliced(currPos, 1))
         }
     }
 
@@ -49,7 +91,6 @@ const DefinitionBox = () => {
                         return (
                             <div className='definition-selection'>
                                 <input type='checkbox' id={`${def.partOfSpeech}-${index}`}
-                                    disabled={chosenDefinition.word && chosenDefinition.definition !== item.definition}
                                     onChange={(e) => onCheck(e, item, def.partOfSpeech)} />
                                 <label htmlFor={`${def.partOfSpeech}-${index}`}>{item.definition}</label>
                             </div>
@@ -71,11 +112,11 @@ const DefinitionBox = () => {
             <div className='items-container'>
                 {definition.definition.meanings.map((def) => { return getDefinitions(def) })}
             </div>
-            {chosenDefinition.word &&
+            {chosenDefinitions.length ?
                 <div className='add-item-container'>
-                    <button id='addToReadBtn'>Add to Current Read</button>
-                    <button id='addToLexiconBtn'>Add to Lexicon</button>
-                </div>
+                    <button id='addToReadBtn' disabled={true}>Add to Current Read</button>
+                    <button id='addToLexiconBtn' onClick={addToLexicon}>Add to Lexicon</button>
+                </div> : null
             }
         </div>
     )
