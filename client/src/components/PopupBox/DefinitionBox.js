@@ -18,47 +18,49 @@ const DefinitionBox = () => {
     }
 
     const addToLexicon = async () => {
-        let res = await updateLexicon({word: definition.definition.word, meanings: chosenDefinitions})
+        let res = await updateLexicon(
+            {
+                word: definition.definition.word,
+                meanings: chosenDefinitions,
+                contexts: {}
+            })
 
         dispatch(setUser({ ...user, words: res.value.words }))
 
         onClose()
     }
 
-    const onCheck = (e, item, pos) => {
-        // Defintion needs reformatting before it can be saved to user
+    const onCheck = (e, item, def) => {
         if (e.target.checked) {
-            addDefinition(item, pos)
+            addDefinition(item, def)
         } else {
-            deleteDefinition(item, pos)
+            deleteDefinition(item, def)
         }
     }
 
-    const addDefinition = (item, pos) => {
-        let currPos = chosenDefinitions.findIndex((def) => def.partOfSpeech === pos)
+    const addDefinition = (item, def) => {
+        let currPos = chosenDefinitions.findIndex((el) => el.partOfSpeech === def.partOfSpeech)
         if (currPos !== -1) {
             let newDefs = {
                 ...chosenDefinitions[currPos],
-                definitions: [...chosenDefinitions[currPos].definitions, { definition: item.definition }]
+                definitions: [...chosenDefinitions[currPos].definitions, item.definition]
             }
             setChosenDefinitions(chosenDefinitions.toSpliced(currPos, 1, newDefs))
         } else {
             setChosenDefinitions([...chosenDefinitions,
             {
-                partOfSpeech: pos,
-                definitions: [
-                    {
-                        definition: item.definition
-                    }
-                ]
+                partOfSpeech: def.partOfSpeech,
+                definitions: [item.definition],
+                synonyms: def.synonyms,
+                antonyms: def.antonyms
             }])
         }
     }
 
-    const deleteDefinition = (item, pos) => {
-        let currPos = chosenDefinitions.findIndex((def) => def.partOfSpeech === pos)
+    const deleteDefinition = (item, def) => {
+        let currPos = chosenDefinitions.findIndex((el) => el.partOfSpeech === def.partOfSpeech)
         if (chosenDefinitions[currPos].definitions.length > 1) {
-            let currDef = chosenDefinitions[currPos].definitions.findIndex(def => def.definition === item.definition)
+            let currDef = chosenDefinitions[currPos].definitions.findIndex(el => el === item.definition)
             let newDefs = {
                 ...chosenDefinitions[currPos],
                 definitions: [...chosenDefinitions[currPos].definitions.toSpliced(currDef, 1)]
@@ -91,7 +93,7 @@ const DefinitionBox = () => {
                         return (
                             <div className='definition-selection'>
                                 <input type='checkbox' id={`${def.partOfSpeech}-${index}`}
-                                    onChange={(e) => onCheck(e, item, def.partOfSpeech)} />
+                                    onChange={(e) => onCheck(e, item, def)} />
                                 <label htmlFor={`${def.partOfSpeech}-${index}`}>{item.definition}</label>
                             </div>
                         )

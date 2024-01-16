@@ -44,9 +44,9 @@ const HomePage = () => {
                 <img id='homeIcon' src={LexemeIcon} alt='Lexeme icon' />
                 <div className='page-title'>Welcome, <span>{user.name}</span></div>
                 <div className='user-summary'>
-                    Lexicon:<span>{user.words.length}</span>words
+                    Lexicon:<span>{user.words.length}</span>word{user.words.length > 1 || user.words.length === 0 ? 's' : null}
                     <span>|</span>
-                    Library:<span>{user.books.length}</span>books
+                    Library:<span>{user.books.length}</span>book{user.books.length > 1 || user.books.length === 0 ? 's' : null}
                 </div>
                 <div className='home-search-container'>
                     <div className='search-title'>Add to Your Lexicon</div>
@@ -58,7 +58,7 @@ const HomePage = () => {
                 </div>
                 <div className='current-book-container'>
                     <div className='current-book-header'>
-                        {user.books.length === 0 ? 'What are you reading right now?' : 'Your Current Read'}
+                        {user.currentRead ? 'Your Current Read' : 'What are you reading right now?'}
                     </div>
                     {!showBookSearch ? <button id='addCurrBookBtn' onClick={() => setShowBookSearch(true)}><IoIosAddCircleOutline size={50} /></button> :
                         <div className='home-search-container'>
