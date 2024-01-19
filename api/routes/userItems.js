@@ -46,22 +46,22 @@ router.put('/lexicon', async (req, res) => {
                 if (result.words.find(item => item.word === req.body.word) === undefined) {
                     finalResult = await collection.findOneAndUpdate(
                         { "_id": new ObjectId(req.user) },
-                        { '$set': { words: [...result.words, req.body] } },
+                        { $set: { words: [...result.words, req.body] } },
                         { returnDocument: 'after' })
                 }
+                else if (!req.body.meanings.length) {
+                    finalResult = await collection.findOneAndUpdate(
+                        { "_id": new ObjectId(req.user) },
+                        { $pull: { words: { word: req.body.word } } },
+                        { returnDocument: 'after' })
+                }
+                else {
+                    finalResult = await collection.findOneAndUpdate(
+                        { "_id": new ObjectId(req.user) },
+                        { $set: { 'words.$[el]': req.body } },
+                        { returnDocument: 'after', arrayFilters: [{ 'el.word': req.body.word }] })
+                }
 
-                // Need to handle duplicate case
-
-                // } else {
-                //     let index = result.words.findIndex(item => item.word === req.body.word)
-                //     let newEntry = { ...result.words[index], meanings: [...result.words[index].meanings, ...req.body.meanings] }
-                //     console.log(newEntry)
-                //     finalResult = await collection.findOneAndUpdate(
-                //         { "_id": new ObjectId(req.user) },
-                //         { '$set': { words: result.words.toSpliced(index, 1, newEntry) } },
-                //         { returnDocument: 'after' })
-                // }
-                
                 if (finalResult) {
                     res.send(finalResult)
                 }

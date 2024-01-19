@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
+import { FaRegStar, FaStar } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
 import { setDefinition, setDefinitionOpen } from '../../slices/DefinitionSlice'
 import { updateLexicon } from '../../utils/userAccount'
@@ -9,7 +10,9 @@ import './PopupBox.css'
 const DefinitionBox = () => {
     const definition = useSelector(state => state.definition)
     const user = useSelector(state => state.user)
-    const [chosenDefinitions, setChosenDefinitions] = useState([])
+    const existing = user.words.find(item => item.word === definition.definition.word)
+    const [chosenDefinitions, setChosenDefinitions] = useState(existing ? [...existing.meanings] : [])
+    const [favorited, setFavorited] = useState(existing ? existing.favorite : false)
     const dispatch = useDispatch()
 
     const onClose = () => {
@@ -17,10 +20,12 @@ const DefinitionBox = () => {
         dispatch(setDefinitionOpen(false))
     }
 
-    const addToLexicon = async () => {
+    const setLexicon = async () => {
         let res = await updateLexicon(
             {
                 word: definition.definition.word,
+                phonetic: definition.definition.phonetic,
+                favorite: favorited,
                 meanings: chosenDefinitions,
                 contexts: {}
             })
@@ -90,10 +95,12 @@ const DefinitionBox = () => {
                 <section className='definition-section'>
                     <div className='items-title'>Defintions</div>
                     {def.definitions.map((item, index) => {
+                        let existingPos = existing?.meanings.find(el => el.partOfSpeech === def.partOfSpeech)
+                        let existingDef = !!existingPos?.definitions.includes(item.definition)
                         return (
                             <div className='definition-selection'>
                                 <input type='checkbox' id={`${def.partOfSpeech}-${index}`}
-                                    onChange={(e) => onCheck(e, item, def)} />
+                                    onChange={(e) => onCheck(e, item, def)} defaultChecked={existingDef} />
                                 <label htmlFor={`${def.partOfSpeech}-${index}`}>{item.definition}</label>
                             </div>
                         )
@@ -106,7 +113,10 @@ const DefinitionBox = () => {
     return (
         <div className='dialogue-container'>
             <div className='popup-box-title'>
-                {definition.definition.word}
+                {definition.definition.word}{definition.definition.phonetic ? <span>{definition.definition.phonetic}</span> : null}
+                <button className='favorite-btn-popup' onClick={() => setFavorited(!favorited)}>
+                    {favorited ? <FaStar size={20} /> : <FaRegStar size={20} />}
+                </button>
             </div>
             <button className='close-btn' onClick={onClose}>
                 <AiOutlineCloseCircle size={20} />
@@ -114,10 +124,10 @@ const DefinitionBox = () => {
             <div className='items-container'>
                 {definition.definition.meanings.map((def) => { return getDefinitions(def) })}
             </div>
-            {chosenDefinitions.length ?
+            {chosenDefinitions.length || existing ?
                 <div className='add-item-container'>
                     <button id='addToReadBtn' disabled={true}>Add to Current Read</button>
-                    <button id='addToLexiconBtn' onClick={addToLexicon}>Add to Lexicon</button>
+                    <button id='setLexiconBtn' onClick={setLexicon}>{existing ? 'Update Lexicon' : 'Add to Lexicon'}</button>
                 </div> : null
             }
         </div>

@@ -7,6 +7,13 @@
     color: white;
 }
 
+.popup-box-title span {
+    vertical-align: middle;
+    font-size: clamp(0.75rem, 5vw, 1rem);
+    padding-left: 0.5rem;
+    padding-right: 0.25rem;
+}
+
 .items-title {
     font-weight: bold;
     font-size: clamp(0.75rem, 5vw, 1rem);
@@ -161,4 +168,12 @@ input[type="checkbox"]:checked::before {
     -webkit-line-clamp: 5;
     display: -webkit-box;
     overflow: hidden;
+}
+
+.favorite-btn-popup {
+    padding-block: 0;
+    background: none;
+    border: none;
+    color: white;
+    vertical-align: middle;
 }
