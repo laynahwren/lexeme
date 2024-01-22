@@ -177,3 +177,16 @@ input[type="checkbox"]:checked::before {
     color: white;
     vertical-align: middle;
 }
+
+.existing-word-popup-btn {
+    padding: 0;
+    margin-top: 0.5rem;
+    background: none;
+    border: none;
+    font-size: clamp(0.5rem, 5vw, 0.75rem);
+    color: white;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    padding-block: 0;
+}

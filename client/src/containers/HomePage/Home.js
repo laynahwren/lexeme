@@ -7,6 +7,7 @@ import { IoIosAddCircleOutline } from 'react-icons/io'
 import { fetchWord, fetchBookByTitle } from '../../utils/fetcher'
 import { setDefinition, setDefinitionOpen } from '../../slices/DefinitionSlice'
 import { setPopupOpen, setBookSearch, setBooks } from '../../slices/BookPopupSlice'
+import { setAlert, setAlertOpen } from '../../slices/AlertBoxSlice'
 import NavBar from '../../components/Nav/NavBar'
 import DefinitionBox from '../../components/PopupBox/DefinitionBox'
 import BookBox from '../../components/PopupBox/BookBox'
@@ -23,8 +24,22 @@ const HomePage = () => {
 
     const onWordSearch = async () => {
         const def = await fetchWord(searchWord)
-        dispatch(setDefinition(def[0]))
-        dispatch(setDefinitionOpen(true))
+        if (def.message) {
+            dispatch(setAlert({
+                subject: searchWord,
+                body: ' not found in dictionary.',
+                closeText: 'Cancel',
+                actions: [
+                    {
+                        text: 'Enter manually'
+                    }
+                ]
+            }))
+            dispatch(setAlertOpen(true))
+        } else {
+            dispatch(setDefinition(def[0]))
+            dispatch(setDefinitionOpen(true))
+        }
         setSearchWord('')
     }
 

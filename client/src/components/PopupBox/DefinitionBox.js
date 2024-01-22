@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { FaRegStar, FaStar } from 'react-icons/fa'
+import { BsArrowRightCircle } from "react-icons/bs"
 import { useSelector, useDispatch } from 'react-redux'
 import { setDefinition, setDefinitionOpen } from '../../slices/DefinitionSlice'
 import { updateLexicon } from '../../utils/userAccount'
 import { setUser } from '../../slices/UserSlice'
+import { setAlert, setAlertOpen } from '../../slices/AlertBoxSlice'
 import './PopupBox.css'
 
 const DefinitionBox = () => {
@@ -21,6 +23,21 @@ const DefinitionBox = () => {
     }
 
     const setLexicon = async () => {
+        // Need delete confirmation
+        // if (!chosenDefinitions.length) {
+        //     dispatch(setAlert({
+        //         subject: definition.definition.word,
+        //         body: ' has no selected defintions and will be removed from your lexicon.',
+        //         closeText: 'Cancel',
+        //         actions: [
+        //             {
+        //                 text: 'Remove from Lexicon'
+        //             }
+        //         ]
+        //     }))
+        //     dispatch(setAlertOpen(true))
+        // }
+
         let res = await updateLexicon(
             {
                 word: definition.definition.word,
@@ -30,6 +47,42 @@ const DefinitionBox = () => {
                 contexts: {}
             })
 
+        if (existing && chosenDefinitions.length) {
+            dispatch(setAlert({
+                subject: definition.definition.word,
+                body: ' has been updated in your lexicon!',
+                closeText: 'Close',
+                actions: [
+                    {
+                        text: 'View in Lexicon',
+                    }
+                ]
+            }))
+        } else if (!chosenDefinitions.length) {
+            dispatch(setAlert({
+                subject: definition.definition.word,
+                body: ' has been removed your lexicon.',
+                closeText: 'Close',
+                actions: [
+                    {
+                        text: 'View Lexicon',
+                    }
+                ]
+            }))
+        } else {
+            dispatch(setAlert({
+                subject: definition.definition.word,
+                body: ' has been added to your lexicon!',
+                closeText: 'Close',
+                actions: [
+                    {
+                        text: 'View in Lexicon',
+                    }
+                ]
+            }))
+        }
+
+        dispatch(setAlertOpen(true))
         dispatch(setUser({ ...user, words: res.value.words }))
 
         onClose()
@@ -117,6 +170,9 @@ const DefinitionBox = () => {
                 <button className='favorite-btn-popup' onClick={() => setFavorited(!favorited)}>
                     {favorited ? <FaStar size={20} /> : <FaRegStar size={20} />}
                 </button>
+                {existing ? <button className='existing-word-popup-btn'>
+                    View in Lexicon{<BsArrowRightCircle size={16} />}
+                </button> : null}
             </div>
             <button className='close-btn' onClick={onClose}>
                 <AiOutlineCloseCircle size={20} />

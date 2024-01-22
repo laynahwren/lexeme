@@ -23,4 +23,5 @@ export const fetchWord = (word) => {
         .then((res) => {
             return res.data
         })
+        .catch((err) => { return err })
 }

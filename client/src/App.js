@@ -1,15 +1,17 @@
 import { useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { checkLoggedIn } from './utils/userAccount'
 import { setUser } from './slices/UserSlice'
 import LandingPage from './containers/LandingPage/LandingPage'
 import HomePage from './containers/HomePage/Home'
 import Library from './containers/Library/Library'
 import Lexicon from './containers/Lexicon/Lexicon'
+import AlertBox from './components/AlertBox/AlertBox'
 import './App.css'
 
 function App() {
+  const alertOpen = useSelector(state => state.alertBox.alertOpen)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -20,6 +22,7 @@ function App() {
             dispatch(setUser({
               name: null,
               email: null,
+              currentRead: null,
               books: [],
               words: []
             }))
@@ -37,6 +40,7 @@ function App() {
         <Route path='/library' element={<Library />} />
         <Route path='/lexicon' element={<Lexicon />} />
       </Routes>
+      {alertOpen ? <AlertBox /> : null}
     </div>
   );
 }
