@@ -1,0 +1,27 @@
+@import '../../globals/globals.css';
+
+.lexicon-word-count {
+    font-size: clamp(1rem, 10vw, 1.5rem);
+    margin-top: 0.5rem;
+}
+
+.lexicon-action-bar {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px var(--red) dotted;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.lexicon-action-bar .sort-menu {
+    top: 2.7rem;
+    left: 0;
+}
+
+.lexicon-search {
+    width: clamp(8rem, 50vw, 15rem);
+    border: 2px solid black;
+    padding: 0.25rem;
+}

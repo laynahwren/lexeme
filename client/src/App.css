@@ -32,9 +32,42 @@
 
 .close-btn {
   color: white;
-  position:absolute;
+  position: absolute;
   top: 3px;
   right: 1px;
   background: none;
   border: none;
+}
+
+.sort-label {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.sort-menu {
+  position: absolute;
+  border-top: 2px solid var(--red);
+  box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.2);
+  background-color: white;
+}
+
+.sort-open-btn {
+  background: none;
+  border: none;
+  color: var(--red);
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.sort-option {
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sort-option:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
