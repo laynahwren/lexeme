@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { FaRegStar, FaStar } from 'react-icons/fa'
-import { BsArrowRightCircle } from "react-icons/bs"
+import { BsArrowRightCircle } from 'react-icons/bs'
 import { useSelector, useDispatch } from 'react-redux'
 import { setDefinition, setDefinitionOpen } from '../../slices/DefinitionSlice'
 import { updateLexicon } from '../../utils/userAccount'
@@ -15,6 +15,7 @@ const DefinitionBox = () => {
     const existing = user.words.find(item => item.word === definition.definition.word)
     const [chosenDefinitions, setChosenDefinitions] = useState(existing ? [...existing.meanings] : [])
     const [favorited, setFavorited] = useState(existing ? existing.favorite : false)
+    const [deleteOpen, setDeleteOpen] = useState(false)
     const dispatch = useDispatch()
 
     const onClose = () => {
@@ -23,21 +24,6 @@ const DefinitionBox = () => {
     }
 
     const setLexicon = async () => {
-        // Need delete confirmation
-        // if (!chosenDefinitions.length) {
-        //     dispatch(setAlert({
-        //         subject: definition.definition.word,
-        //         body: ' has no selected defintions and will be removed from your lexicon.',
-        //         closeText: 'Cancel',
-        //         actions: [
-        //             {
-        //                 text: 'Remove from Lexicon'
-        //             }
-        //         ]
-        //     }))
-        //     dispatch(setAlertOpen(true))
-        // }
-
         let res = await updateLexicon(
             {
                 word: definition.definition.word,
@@ -164,29 +150,47 @@ const DefinitionBox = () => {
     }
 
     return (
-        <div className='dialogue-container'>
-            <div className='popup-box-title'>
-                {definition.definition.word}{definition.definition.phonetic ? <span>{definition.definition.phonetic}</span> : null}
-                <button className='favorite-btn-popup' onClick={() => setFavorited(!favorited)}>
-                    {favorited ? <FaStar size={20} /> : <FaRegStar size={20} />}
+        <>
+            <div className='dialogue-container'>
+                <div className='popup-box-title'>
+                    {definition.definition.word}{definition.definition.phonetic ? <span>{definition.definition.phonetic}</span> : null}
+                    <button className='favorite-btn-popup' onClick={() => setFavorited(!favorited)}>
+                        {favorited ? <FaStar size={20} /> : <FaRegStar size={20} />}
+                    </button>
+                    {existing ? <button className='existing-word-popup-btn'>
+                        View in Lexicon{<BsArrowRightCircle size={16} />}
+                    </button> : null}
+                </div>
+                <button className='close-btn' onClick={onClose}>
+                    <AiOutlineCloseCircle size={20} />
                 </button>
-                {existing ? <button className='existing-word-popup-btn'>
-                    View in Lexicon{<BsArrowRightCircle size={16} />}
-                </button> : null}
+                <div className='items-container'>
+                    {definition.definition.meanings.map((def) => { return getDefinitions(def) })}
+                </div>
+                {chosenDefinitions.length || existing ?
+                    <div className='add-item-container'>
+                        <button id='addToReadBtn' disabled={true}>Add to Current Read</button>
+                        <button id='setLexiconBtn'
+                            onClick={() => {
+                                if (!chosenDefinitions.length) {
+                                    setDeleteOpen(true)
+                                } else {
+                                    setLexicon()
+                                }
+                            }}>{existing ? 'Update Lexicon' : 'Add to Lexicon'}</button>
+                    </div> : null
+                }
             </div>
-            <button className='close-btn' onClick={onClose}>
-                <AiOutlineCloseCircle size={20} />
-            </button>
-            <div className='items-container'>
-                {definition.definition.meanings.map((def) => { return getDefinitions(def) })}
-            </div>
-            {chosenDefinitions.length || existing ?
-                <div className='add-item-container'>
-                    <button id='addToReadBtn' disabled={true}>Add to Current Read</button>
-                    <button id='setLexiconBtn' onClick={setLexicon}>{existing ? 'Update Lexicon' : 'Add to Lexicon'}</button>
-                </div> : null
-            }
-        </div>
+            {deleteOpen ?
+                <div className='dialogue-container' id='deleteConfirmation'>
+                    <span>{definition.definition.word}</span> has no selected definitions and will be removed from your lexicon.
+                    <div className='delete-actions'>
+                        <button onClick={setLexicon}>Remove from Lexicon</button>
+                        <button onClick={() => setDeleteOpen(false)}>Cancel</button>
+                    </div>
+                </div>
+                : null}
+        </>
     )
 }
 

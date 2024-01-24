@@ -1,0 +1,48 @@
+@import '../../globals/globals.css';
+
+.word-display-container {
+    border: solid 1px var(--red);
+    padding: 0.5rem;
+    border-radius: 5px;
+    position: relative;
+}
+
+.word-display-title {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.favorite-btn-lexicon {
+    padding: 0;
+    background: none;
+    border: none;
+    color: var(--red);
+    position: absolute;
+    top: 4px;
+    right: 4px;
+}
+
+.definition-count-container {
+    font-size: 0.95rem;
+    display: flex;
+    gap: 0.25rem;
+}
+
+.definition-count-container span {
+    color: var(--red);
+    font-weight: bold;
+}
+
+.word-display-action {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+}
+
+.word-display-action button {
+    padding-block: 0;
+    background: none;
+    border: none;
+    color: var(--red);
+}

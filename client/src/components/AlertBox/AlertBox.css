@@ -1,5 +1,9 @@
 @import '../../globals/globals.css';
 
+#alertContainer {
+    max-width: 35rem;
+}
+
 .alert-close-btn {
     color: var(--red);
     position: absolute;
@@ -13,8 +17,7 @@
     font-size: clamp(0.95rem, 5vw, 1.25rem);
     text-align: center;
     padding: 1rem;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    padding-bottom: 1.5rem;
 }
 
 .alert-box-subject {
@@ -39,9 +42,5 @@
 
 .alert-action-btn:hover {
     background-color: var(--red);
-    border: 1px solid var(--red);
     color: white;
-    padding: 0.5rem;
-    font-size: clamp(0.75rem, 5vw, 1rem);
-    border-radius: 5px;
 }

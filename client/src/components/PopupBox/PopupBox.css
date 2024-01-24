@@ -190,3 +190,36 @@ input[type="checkbox"]:checked::before {
     align-items: center;
     padding-block: 0;
 }
+
+#deleteConfirmation {
+    border: 1px solid var(--red);
+    max-width: 30rem;
+    padding: 1rem;
+    text-align: center;
+}
+
+#deleteConfirmation span {
+    color: var(--red);
+}
+
+.delete-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    padding-bottom: 0;
+}
+
+.delete-actions button {
+    background: none;
+    border: 1px solid var(--red);
+    color: var(--red);
+    padding: 0.5rem;
+    font-size: clamp(0.75rem, 5vw, 1rem);
+    border-radius: 5px;
+}
+
+.delete-actions button:hover {
+    background-color: var(--red);
+    color: white;
+}
