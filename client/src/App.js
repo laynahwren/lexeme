@@ -8,6 +8,7 @@ import HomePage from './containers/HomePage/Home'
 import Library from './containers/Library/Library'
 import Lexicon from './containers/Lexicon/Lexicon'
 import AlertBox from './components/AlertBox/AlertBox'
+import WordPage from './containers/WordPage/WordPage'
 import './App.css'
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
         <Route path='/home' element={<HomePage />} />
         <Route path='/library' element={<Library />} />
         <Route path='/lexicon' element={<Lexicon />} />
+        <Route path='/lexicon/:word' element={<WordPage />} />
       </Routes>
       {alertOpen ? <AlertBox /> : null}
     </div>

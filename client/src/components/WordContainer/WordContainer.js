@@ -1,8 +1,10 @@
 import { FaRegStar, FaStar } from 'react-icons/fa'
 import { BsArrowRightCircle } from 'react-icons/bs'
+import { useNavigate } from 'react-router-dom'
 import './WordContainer.css'
 
 const WordContainer = (props) => {
+    const navigate = useNavigate()
 
     const getDefCount = () => {
         return props.word.meanings.map(def => {
@@ -23,9 +25,8 @@ const WordContainer = (props) => {
             <div className='definition-count-container'>
                 {getDefCount()}
             </div>
-            {/* Need minimized display with arrow on right of container when on smaller screens */}
             <div className='word-display-action'>
-                View <button><BsArrowRightCircle size={20} /></button>
+                View <button onClick={() => navigate(`/lexicon/${props.word.word}`)}><BsArrowRightCircle size={20} /></button>
             </div>
         </div>
     )

@@ -7,6 +7,7 @@ import { setDefinition, setDefinitionOpen } from '../../slices/DefinitionSlice'
 import { updateLexicon } from '../../utils/userAccount'
 import { setUser } from '../../slices/UserSlice'
 import { setAlert, setAlertOpen } from '../../slices/AlertBoxSlice'
+import { useNavigate } from 'react-router-dom'
 import './PopupBox.css'
 
 const DefinitionBox = () => {
@@ -17,6 +18,7 @@ const DefinitionBox = () => {
     const [favorited, setFavorited] = useState(existing ? existing.favorite : false)
     const [deleteOpen, setDeleteOpen] = useState(false)
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const onClose = () => {
         dispatch(setDefinition({}))
@@ -41,6 +43,7 @@ const DefinitionBox = () => {
                 actions: [
                     {
                         text: 'View in Lexicon',
+                        path: `/lexicon/${definition.definition.word}`
                     }
                 ]
             }))
@@ -52,6 +55,7 @@ const DefinitionBox = () => {
                 actions: [
                     {
                         text: 'View Lexicon',
+                        path: '/lexicon'
                     }
                 ]
             }))
@@ -63,6 +67,7 @@ const DefinitionBox = () => {
                 actions: [
                     {
                         text: 'View in Lexicon',
+                        path: `/lexicon/${definition.definition.word}`
                     }
                 ]
             }))
@@ -157,7 +162,11 @@ const DefinitionBox = () => {
                     <button className='favorite-btn-popup' onClick={() => setFavorited(!favorited)}>
                         {favorited ? <FaStar size={20} /> : <FaRegStar size={20} />}
                     </button>
-                    {existing ? <button className='existing-word-popup-btn'>
+                    {existing ? <button className='existing-word-popup-btn'
+                        onClick={() => {
+                            navigate(`/lexicon/${definition.definition.word}`)
+                            onClose()
+                        }}>
                         View in Lexicon{<BsArrowRightCircle size={16} />}
                     </button> : null}
                 </div>

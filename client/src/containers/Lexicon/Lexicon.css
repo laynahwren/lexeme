@@ -1,7 +1,7 @@
 @import '../../globals/globals.css';
 
 .lexicon-word-count {
-    font-size: clamp(1rem, 10vw, 1.5rem);
+    font-size: clamp(0.95rem, 10vw, 1.25rem);
     margin-top: 0.5rem;
 }
 
@@ -30,5 +30,5 @@
     margin-top: 1rem;
     display: grid;
     gap: 1rem;
-    grid-template-columns: repeat(auto-fill, 15rem);
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
 }

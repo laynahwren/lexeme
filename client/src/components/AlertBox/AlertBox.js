@@ -1,10 +1,12 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { setAlertOpen } from '../../slices/AlertBoxSlice'
+import { useNavigate } from 'react-router-dom'
 import './AlertBox.css'
 
 const AlertBox = () => {
     const alert = useSelector(state => state.alertBox)
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     return (
         <div className='dialogue-container' id='alertContainer'>
@@ -15,7 +17,11 @@ const AlertBox = () => {
             <div className='alert-box-actions'>
                 {alert.actions.map(item => {
                     return (
-                        <button key={item.text} className='alert-action-btn'>{item.text}</button>
+                        <button key={item.text} className='alert-action-btn' onClick={() => {
+                            navigate(item.path)
+                            dispatch(setAlertOpen(false))
+                        }}>
+                            {item.text}</button>
                     )
                 })}
                 <button className='alert-action-btn' onClick={() => {

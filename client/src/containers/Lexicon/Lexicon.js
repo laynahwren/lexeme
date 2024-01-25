@@ -16,7 +16,7 @@ const Lexicon = () => {
     return (user.name ?
         <>
             <NavBar />
-            <div className='page-title'>
+            <div className='page-title inner-page-title'>
                 {user.name}'s<span> Lexicon</span>
                 <div className='lexicon-word-count'><span>{user.words.length}</span> word{user.words.length > 1 || user.words.length === 0 ? 's' : null}</div>
             </div>
