@@ -10,6 +10,7 @@ import { setAlert, setAlertOpen } from '../../slices/AlertBoxSlice'
 import { useNavigate } from 'react-router-dom'
 import './PopupBox.css'
 
+// Need to consider formatting changes and delete handling when this opens on the word page in lexicon
 const DefinitionBox = () => {
     const definition = useSelector(state => state.definition)
     const user = useSelector(state => state.user)
@@ -137,7 +138,7 @@ const DefinitionBox = () => {
                     </section> : null
                 }
                 <section className='definition-section'>
-                    <div className='items-title'>Defintions</div>
+                    <div className='items-title'>definitions</div>
                     {def.definitions.map((item, index) => {
                         let existingPos = existing?.meanings.find(el => el.partOfSpeech === def.partOfSpeech)
                         let existingDef = !!existingPos?.definitions.includes(item.definition)

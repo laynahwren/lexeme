@@ -9,7 +9,7 @@ const Library = () => {
     return (user.name ?
         <>
             <NavBar />
-            <div className='page-title'>{user.name}'s<span> Library</span></div>
+            <div className='page-title inner-page-title'>{user.name}'s<span> Library</span></div>
         </> :
         <Navigate to='/' />
     )

@@ -37,8 +37,10 @@ const Lexicon = () => {
 
                 <input className='lexicon-search' type='text' placeholder='Search' />
             </div>
-            <div className='lexicon-word-display'>
-                {user.words.map(word => { return <WordContainer key={word.word} word={word} /> })}
+            <div className='page-container'>
+                <div className='lexicon-word-display'>
+                    {user.words.map(word => { return <WordContainer key={word.word} word={word} /> })}
+                </div>
             </div>
         </> :
         <Navigate to='/' />

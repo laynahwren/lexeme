@@ -17,3 +17,7 @@ body input {
   font-family: 'Raleway', sans-serif;
 }
 
+#root {
+  height: 100vh;
+}
+
