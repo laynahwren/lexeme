@@ -4,7 +4,8 @@ export const definitionSlice = createSlice({
     name: 'definition',
     initialState: {
         definitionOpen: false,
-        definition: {}
+        definition: {},
+        inLexicon: false
     },
     reducers: {
         setDefinitionOpen: (state, action) => {
@@ -12,9 +13,12 @@ export const definitionSlice = createSlice({
         },
         setDefinition: (state, action) => {
             state.definition = action.payload
+        },
+        setInLexicon: (state, action) => {
+            state.inLexicon = action.payload
         }
     }
 })
 
-export const { setDefinitionOpen, setDefinition } = definitionSlice.actions
+export const { setDefinitionOpen, setDefinition, setInLexicon } = definitionSlice.actions
 export default definitionSlice.reducer

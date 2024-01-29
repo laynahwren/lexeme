@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import LexemeIcon from '../../assets/LexemeIcon.png'
 import { BsSearch } from 'react-icons/bs'
 import { IoIosAddCircleOutline } from 'react-icons/io'
 import { fetchWord, fetchBookByTitle } from '../../utils/fetcher'
-import { setDefinition, setDefinitionOpen } from '../../slices/DefinitionSlice'
+import { setDefinition, setDefinitionOpen, setInLexicon } from '../../slices/DefinitionSlice'
 import { setPopupOpen, setBookSearch, setBooks } from '../../slices/BookPopupSlice'
 import { setAlert, setAlertOpen } from '../../slices/AlertBoxSlice'
 import NavBar from '../../components/Nav/NavBar'
@@ -21,6 +21,10 @@ const HomePage = () => {
     const [searchBook, setSearchBook] = useState('')
     const [showBookSearch, setShowBookSearch] = useState(false)
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(setInLexicon(false))
+    })
 
     const onWordSearch = async () => {
         const def = await fetchWord(searchWord)

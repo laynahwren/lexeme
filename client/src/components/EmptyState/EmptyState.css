@@ -1,0 +1,30 @@
+@import '../../globals/globals.css';
+
+.empty-state-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    gap: 0.5rem;
+    padding-top: 2rem;
+}
+
+.empty-state-title {
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.empty-state-title span {
+    color: var(--red);
+}
+
+.empty-state-container button {
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--red);
+}
+
+.empty-state-subtitle {
+    text-align: center;
+}

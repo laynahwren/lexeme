@@ -15,7 +15,7 @@ const AlertBox = () => {
                 <span className='alert-box-body'>{alert.body}</span>
             </div>
             <div className='alert-box-actions'>
-                {alert.actions.map(item => {
+                {alert.actions?.map(item => {
                     return (
                         <button key={item.text} className='alert-action-btn' onClick={() => {
                             navigate(item.path)

@@ -10,7 +10,6 @@ import { setAlert, setAlertOpen } from '../../slices/AlertBoxSlice'
 import { useNavigate } from 'react-router-dom'
 import './PopupBox.css'
 
-// Need to consider formatting changes and delete handling when this opens on the word page in lexicon
 const DefinitionBox = () => {
     const definition = useSelector(state => state.definition)
     const user = useSelector(state => state.user)
@@ -18,6 +17,7 @@ const DefinitionBox = () => {
     const [chosenDefinitions, setChosenDefinitions] = useState(existing ? [...existing.meanings] : [])
     const [favorited, setFavorited] = useState(existing ? existing.favorite : false)
     const [deleteOpen, setDeleteOpen] = useState(false)
+    const [deleteText, setDeleteText] = useState('')
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -41,24 +41,24 @@ const DefinitionBox = () => {
                 subject: definition.definition.word,
                 body: ' has been updated in your lexicon!',
                 closeText: 'Close',
-                actions: [
+                actions: !definition.inLexicon ? [
                     {
                         text: 'View in Lexicon',
                         path: `/lexicon/${definition.definition.word}`
                     }
-                ]
+                ] : null
             }))
         } else if (!chosenDefinitions.length) {
             dispatch(setAlert({
                 subject: definition.definition.word,
                 body: ' has been removed your lexicon.',
                 closeText: 'Close',
-                actions: [
+                actions: !definition.inLexicon ? [
                     {
                         text: 'View Lexicon',
                         path: '/lexicon'
                     }
-                ]
+                ] : null
             }))
         } else {
             dispatch(setAlert({
@@ -144,7 +144,7 @@ const DefinitionBox = () => {
                         let existingDef = !!existingPos?.definitions.includes(item.definition)
                         return (
                             <div className='definition-selection'>
-                                <input type='checkbox' id={`${def.partOfSpeech}-${index}`}
+                                <input type='checkbox' id={`${def.partOfSpeech}-${index}`} disabled={deleteOpen}
                                     onChange={(e) => onCheck(e, item, def)} defaultChecked={existingDef} />
                                 <label htmlFor={`${def.partOfSpeech}-${index}`}>{item.definition}</label>
                             </div>
@@ -160,10 +160,10 @@ const DefinitionBox = () => {
             <div className='dialogue-container'>
                 <div className='popup-box-title'>
                     {definition.definition.word}{definition.definition.phonetic ? <span>{definition.definition.phonetic}</span> : null}
-                    <button className='favorite-btn-popup' onClick={() => setFavorited(!favorited)}>
+                    <button disabled={deleteOpen} className='favorite-btn-popup' onClick={() => setFavorited(!favorited)}>
                         {favorited ? <FaStar size={20} /> : <FaRegStar size={20} />}
                     </button>
-                    {existing ? <button className='existing-word-popup-btn'
+                    {existing && !definition.inLexicon ? <button disabled={deleteOpen} className='existing-word-popup-btn'
                         onClick={() => {
                             navigate(`/lexicon/${definition.definition.word}`)
                             onClose()
@@ -171,7 +171,8 @@ const DefinitionBox = () => {
                         View in Lexicon{<BsArrowRightCircle size={16} />}
                     </button> : null}
                 </div>
-                <button className='close-btn' onClick={onClose}>
+                <button className='close-btn' disabled={deleteOpen}
+                    onClick={onClose}>
                     <AiOutlineCloseCircle size={20} />
                 </button>
                 <div className='items-container'>
@@ -179,10 +180,16 @@ const DefinitionBox = () => {
                 </div>
                 {chosenDefinitions.length || existing ?
                     <div className='add-item-container'>
-                        <button id='addToReadBtn' disabled={true}>Add to Current Read</button>
-                        <button id='setLexiconBtn'
+                        {existing ? <button disabled={deleteOpen}
+                            onClick={() => {
+                                setDeleteText(' will be removed from your lexicon.')
+                                setDeleteOpen(true)
+                            }}>Remove from Lexicon</button> : null}
+                        <button disabled={deleteOpen}>Add to Current Read</button>
+                        <button disabled={deleteOpen}
                             onClick={() => {
                                 if (!chosenDefinitions.length) {
+                                    setDeleteText(' has no selected definitions and will be removed from your lexicon.')
                                     setDeleteOpen(true)
                                 } else {
                                     setLexicon()
@@ -193,9 +200,14 @@ const DefinitionBox = () => {
             </div>
             {deleteOpen ?
                 <div className='dialogue-container' id='deleteConfirmation'>
-                    <span>{definition.definition.word}</span> has no selected definitions and will be removed from your lexicon.
+                    <span>{definition.definition.word}</span>{deleteText}
                     <div className='delete-actions'>
-                        <button onClick={setLexicon}>Remove from Lexicon</button>
+                        <button onClick={() => {
+                            if (definition.inLexicon) {
+                                navigate('/lexicon')
+                            }
+                            setLexicon()
+                        }}>Remove from Lexicon</button>
                         <button onClick={() => setDeleteOpen(false)}>Cancel</button>
                     </div>
                 </div>

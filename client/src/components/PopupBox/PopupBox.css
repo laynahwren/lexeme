@@ -130,9 +130,9 @@ input[type="checkbox"]:checked::before {
 }
 
 .add-item-container button:disabled {
-    background-color: white;
-    color: darkgray;
     cursor: auto;
+    background-color: var(--red);
+    color: white;
 }
 
 .book-res-container {
@@ -178,6 +178,10 @@ input[type="checkbox"]:checked::before {
     vertical-align: middle;
 }
 
+.favorite-btn-popup:disabled {
+    cursor: auto;
+}
+
 .existing-word-popup-btn {
     padding: 0;
     margin-top: 0.5rem;
@@ -189,6 +193,10 @@ input[type="checkbox"]:checked::before {
     gap: 0.5rem;
     align-items: center;
     padding-block: 0;
+}
+
+.existing-word-popup-btn:disabled {
+    cursor: auto;
 }
 
 #deleteConfirmation {
