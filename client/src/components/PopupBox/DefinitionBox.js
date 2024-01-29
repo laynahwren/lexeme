@@ -26,29 +26,17 @@ const DefinitionBox = () => {
         dispatch(setDefinitionOpen(false))
     }
 
-    const setLexicon = async () => {
+    const setLexicon = async (action) => {
         let res = await updateLexicon(
             {
                 word: definition.definition.word,
                 phonetic: definition.definition.phonetic,
                 favorite: favorited,
-                meanings: chosenDefinitions,
+                meanings: action === 'delete' ? [] : chosenDefinitions,
                 contexts: {}
             })
 
-        if (existing && chosenDefinitions.length) {
-            dispatch(setAlert({
-                subject: definition.definition.word,
-                body: ' has been updated in your lexicon!',
-                closeText: 'Close',
-                actions: !definition.inLexicon ? [
-                    {
-                        text: 'View in Lexicon',
-                        path: `/lexicon/${definition.definition.word}`
-                    }
-                ] : null
-            }))
-        } else if (!chosenDefinitions.length) {
+        if (action === 'delete') {
             dispatch(setAlert({
                 subject: definition.definition.word,
                 body: ' has been removed your lexicon.',
@@ -57,6 +45,18 @@ const DefinitionBox = () => {
                     {
                         text: 'View Lexicon',
                         path: '/lexicon'
+                    }
+                ] : null
+            }))
+        } else if (existing) {
+            dispatch(setAlert({
+                subject: definition.definition.word,
+                body: ' has been updated in your lexicon!',
+                closeText: 'Close',
+                actions: !definition.inLexicon ? [
+                    {
+                        text: 'View in Lexicon',
+                        path: `/lexicon/${definition.definition.word}`
                     }
                 ] : null
             }))
@@ -206,7 +206,7 @@ const DefinitionBox = () => {
                             if (definition.inLexicon) {
                                 navigate('/lexicon')
                             }
-                            setLexicon()
+                            setLexicon('delete')
                         }}>Remove from Lexicon</button>
                         <button onClick={() => setDeleteOpen(false)}>Cancel</button>
                     </div>
