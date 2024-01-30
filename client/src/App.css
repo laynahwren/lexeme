@@ -114,6 +114,13 @@
   cursor: pointer;
 }
 
+.selected-svg {
+  color: var(--red);
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-end;
+}
+
 .page-container {
   flex-grow: 1;
   overflow-y: auto;

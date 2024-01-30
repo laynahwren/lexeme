@@ -46,7 +46,7 @@ router.put('/lexicon', async (req, res) => {
                 if (result.words.find(item => item.word === req.body.word) === undefined) {
                     finalResult = await collection.findOneAndUpdate(
                         { "_id": new ObjectId(req.user) },
-                        { $set: { words: [...result.words, req.body] } },
+                        { $set: { words: [...result.words, {...req.body, date: new Date()}] } },
                         { returnDocument: 'after' })
                 }
                 else if (!req.body.meanings.length) {
