@@ -5,7 +5,7 @@ import LexemeIcon from '../../assets/LexemeIcon.png'
 import { BsSearch } from 'react-icons/bs'
 import { IoIosAddCircleOutline } from 'react-icons/io'
 import { fetchWord, fetchBookByTitle } from '../../utils/fetcher'
-import { setDefinition, setDefinitionOpen, setInLexicon } from '../../slices/DefinitionSlice'
+import { setDefinition, setDefinitionOpen, setInWord } from '../../slices/DefinitionSlice'
 import { setPopupOpen, setBookSearch, setBooks } from '../../slices/BookPopupSlice'
 import { setAlert, setAlertOpen } from '../../slices/AlertBoxSlice'
 import NavBar from '../../components/Nav/NavBar'
@@ -23,7 +23,7 @@ const HomePage = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(setInLexicon(false))
+        dispatch(setInWord(false))
     })
 
     const onWordSearch = async () => {

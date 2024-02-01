@@ -7,7 +7,12 @@ export const userSlice = createSlice({
         email: null,
         books: [],
         words: [],
-        currentRead: null
+        currentRead: null,
+        wordSort: {
+            opt: 'new',
+            sortBy: 'date',
+            sortDirection: 'desc'
+        }
     },
     reducers: {
         setUser: (state, action) => {
@@ -17,6 +22,7 @@ export const userSlice = createSlice({
             state.books = [ ...data.books ]
             state.words = [ ...data.words ]
             state.currentRead = data.currentRead
+            state.wordSort = data.wordSort ? data.wordSort : state.wordSort
         }
     }
 })

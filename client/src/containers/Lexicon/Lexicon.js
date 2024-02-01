@@ -1,35 +1,58 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import {
     FaChevronDown, FaChevronUp, FaStar, FaSortAlphaDown, FaSortAlphaDownAlt,
     FaSortNumericDown, FaSortNumericDownAlt, FaCheck
 } from "react-icons/fa";
 import NavBar from '../../components/Nav/NavBar'
 import WordContainer from '../../components/WordContainer/WordContainer';
-import { sortAsc, sortDesc, search } from '../../utils/sortSearch';
+import { sortCollection, search } from '../../utils/sortSearch';
+import { setUser } from '../../slices/UserSlice';
+import { setInWord } from '../../slices/DefinitionSlice';
+import EmptyState from '../../components/EmptyState/EmptyState';
+import DefinitionBox from '../../components/PopupBox/DefinitionBox';
 import './Lexicon.css'
 
 const Lexicon = () => {
     const user = useSelector(state => state.user)
+    const { definitionOpen } = useSelector(state => state.definition)
     const [sortOpen, setSortOpen] = useState(false)
-    // Need to save sorted in store
-    const [sorted, setSorted] = useState([...user.words].reverse())
-    const [selected, setSelected] = useState('new')
+    const [sorted, setSorted] = useState([...user.words])
+    const [selected, setSelected] = useState(user.wordSort.opt)
     const [searchTerm, setSearchTerm] = useState('')
-    const [searched, setSearched] = useState([...user.words].reverse())
+    const [searched, setSearched] = useState([...user.words])
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(setInWord(false))
+    })
+
+    useEffect(() => {
+        if (searched.length === 0) {
+            setSearched(user.words)
+            setSearchTerm('')
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user.words])
 
     const onSelect = (opt, sortBy, sortDirection) => {
         setSelected(opt)
-        let res
-        if (sortDirection === 'asc') {
-            res = sortAsc([...user.words], sortBy)
-        } else {
-            res = sortDesc([...user.words], sortBy)
-        }
+
+        let res = sortCollection([...user.words], sortBy, sortDirection)
+
         setSorted(res)
         onSearch(res, searchTerm)
         setSortOpen(false)
+        dispatch(setUser({
+            ...user,
+            words: res,
+            wordSort: {
+                opt: opt,
+                sortBy: sortBy,
+                sortDirection: sortDirection
+            }
+        }))
     }
 
     const onSearch = (res, term) => {
@@ -76,16 +99,24 @@ const Lexicon = () => {
                     </div>
                 </div> : null}
 
-                <input className='lexicon-search' type='text' placeholder='Search' onChange={(e) => {
+                <input className='lexicon-search' type='text' placeholder='Search' value={searchTerm} onChange={(e) => {
                     setSearchTerm(e.target.value)
                     onSearch(sorted, e.target.value)
                 }} />
             </div>
             <div className='page-container'>
-                <div className='lexicon-word-display'>
-                    {searched.map(word => { return <WordContainer key={word.word} word={word} /> })}
-                </div>
+                {searched.length !== 0 ?
+                    <div className='lexicon-word-display'>
+                        {searched.map(word => { return <WordContainer key={word.word} word={word} /> })}
+                    </div> :
+                    <EmptyState context={user.words.length === 0 ? 'words' : searchTerm}
+                        subtitle={'Search and add word'}
+                        type='word'
+                        searchWord={user.words.length !== 0 ? true : false}
+                    />
+                }
             </div>
+            {definitionOpen && <DefinitionBox />}
         </> :
         <Navigate to='/' />
     )

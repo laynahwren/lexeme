@@ -7,6 +7,7 @@ import { setLoginOpen } from '../../slices/AuthSlice'
 import { setUser } from '../../slices/UserSlice'
 import { login } from '../../utils/userAccount'
 import { AuthError } from '../Errors'
+import { sortCollection } from '../../utils/sortSearch'
 import './styles.css'
 
 const LogInForm = () => {
@@ -34,8 +35,14 @@ const LogInForm = () => {
                     message: 'Incorrect password',
                 })
             } else {
+                let newSort = {
+                    opt: 'new',
+                    sortBy: 'date',
+                    sortDirection: 'desc'
+                }
+                let sortedWords = sortCollection(res.words, newSort.sortBy, newSort.sortDirection)
                 dispatch(setLoginOpen(false))
-                dispatch(setUser(res))
+                dispatch(setUser({ ...res, words: sortedWords, wordSort: newSort }))
                 navigate('/home')
             }
         })
@@ -50,7 +57,7 @@ const LogInForm = () => {
                 <AiOutlineCloseCircle size={20} />
             </button>
             <form className='auth-form' id='loginForm'>
-            {error.message &&
+                {error.message &&
                     <AuthError action={{ action: error.action, text: error.actionText }}>{error.message}</AuthError>}
                 <label htmlFor='emailInput'>Email</label>
                 <input id='emailInput' type='text' placeholder='Enter your email' required autoComplete='off' />

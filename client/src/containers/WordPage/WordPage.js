@@ -11,9 +11,10 @@ import {
 import { IoIosAddCircleOutline } from 'react-icons/io'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { fetchWord } from '../../utils/fetcher'
-import { setDefinition, setDefinitionOpen, setInLexicon } from '../../slices/DefinitionSlice'
+import { setDefinition, setDefinitionOpen, setInWord } from '../../slices/DefinitionSlice'
 import { updateLexicon } from '../../utils/userAccount'
 import { setUser } from '../../slices/UserSlice'
+import { sortCollection } from '../../utils/sortSearch'
 import DefinitionBox from '../../components/PopupBox/DefinitionBox'
 import EmptyState from '../../components/EmptyState/EmptyState'
 import './WordPage.css'
@@ -28,12 +29,13 @@ const WordPage = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(setInLexicon(true))
+        dispatch(setInWord(true))
     })
 
     const setFavorite = async () => {
         let res = await updateLexicon({ ...definition, favorite: !definition.favorite })
-        dispatch(setUser({ ...user, words: res.value.words }))
+        let sortedRes = sortCollection(res.value.words, user.wordSort.sortBy, user.wordSort.sortDirection)
+        dispatch(setUser({ ...user, words: sortedRes }))
     }
 
     const onWordSearch = async () => {
@@ -85,14 +87,14 @@ const WordPage = () => {
                     <button onClick={() => navigate('/lexicon')}><BsArrowLeftCircle size={20} /></button>Return to Lexicon
                 </div>
                 <div className='page-title single-view-title'>
-                    <button onClick={setFavorite}>{definition.favorite ? <FaStar size={28} /> : <FaRegStar size={28} />}</button>
+                    <button onClick={setFavorite}>{definition?.favorite ? <FaStar size={28} /> : <FaRegStar size={28} />}</button>
                     {word}
                 </div>
-                <div className='single-view-subtitle'>{definition.phonetic}</div>
+                <div className='single-view-subtitle'>{definition?.phonetic}</div>
             </div>
             <div className='page-container'>
                 <div className='word-definitions-display-container'>
-                    {definition.meanings.map(item => {
+                    {definition?.meanings.map(item => {
                         return (
                             <div key={item.partOfSpeech}>
                                 <div className='definition-pos-title'>{item.partOfSpeech}</div>
@@ -124,7 +126,7 @@ const WordPage = () => {
 
                         <input className='lexicon-search' type='text' placeholder='Search' />
                     </div>
-                    <EmptyState context={'contexts'} subtitle={'Search and add context'} />
+                    <EmptyState context={'contexts'} type='book' subtitle={'Search and add context'} />
                 </div>
                 {definitionOpen && <DefinitionBox />}
             </div>

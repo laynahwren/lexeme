@@ -8,6 +8,7 @@ import { updateLexicon } from '../../utils/userAccount'
 import { setUser } from '../../slices/UserSlice'
 import { setAlert, setAlertOpen } from '../../slices/AlertBoxSlice'
 import { useNavigate } from 'react-router-dom'
+import { sortCollection } from '../../utils/sortSearch'
 import './PopupBox.css'
 
 const DefinitionBox = () => {
@@ -33,7 +34,8 @@ const DefinitionBox = () => {
                 phonetic: definition.definition.phonetic,
                 favorite: favorited,
                 meanings: action === 'delete' ? [] : chosenDefinitions,
-                contexts: {}
+                contexts: {},
+                date: existing ? existing.date : null
             })
 
         if (action === 'delete') {
@@ -41,7 +43,7 @@ const DefinitionBox = () => {
                 subject: definition.definition.word,
                 body: ' has been removed your lexicon.',
                 closeText: 'Close',
-                actions: !definition.inLexicon ? [
+                actions: !definition.inWord ? [
                     {
                         text: 'View Lexicon',
                         path: '/lexicon'
@@ -53,7 +55,7 @@ const DefinitionBox = () => {
                 subject: definition.definition.word,
                 body: ' has been updated in your lexicon!',
                 closeText: 'Close',
-                actions: !definition.inLexicon ? [
+                actions: !definition.inWord ? [
                     {
                         text: 'View in Lexicon',
                         path: `/lexicon/${definition.definition.word}`
@@ -74,8 +76,14 @@ const DefinitionBox = () => {
             }))
         }
 
+        let sortedRes = sortCollection(res.value.words, user.wordSort.sortBy, user.wordSort.sortDirection)
+
         dispatch(setAlertOpen(true))
-        dispatch(setUser({ ...user, words: res.value.words }))
+        dispatch(setUser({ ...user, words: sortedRes }))
+
+        if (definition.inWord && action === 'delete') {
+            navigate('/lexicon')
+        }
 
         onClose()
     }
@@ -143,7 +151,7 @@ const DefinitionBox = () => {
                         let existingPos = existing?.meanings.find(el => el.partOfSpeech === def.partOfSpeech)
                         let existingDef = !!existingPos?.definitions.includes(item.definition)
                         return (
-                            <div className='definition-selection'>
+                            <div key={`${def.partOfSpeech}-${index}`} className='definition-selection'>
                                 <input type='checkbox' id={`${def.partOfSpeech}-${index}`} disabled={deleteOpen}
                                     onChange={(e) => onCheck(e, item, def)} defaultChecked={existingDef} />
                                 <label htmlFor={`${def.partOfSpeech}-${index}`}>{item.definition}</label>
@@ -163,7 +171,7 @@ const DefinitionBox = () => {
                     <button disabled={deleteOpen} className='favorite-btn-popup' onClick={() => setFavorited(!favorited)}>
                         {favorited ? <FaStar size={20} /> : <FaRegStar size={20} />}
                     </button>
-                    {existing && !definition.inLexicon ? <button disabled={deleteOpen} className='existing-word-popup-btn'
+                    {existing && !definition.inWord ? <button disabled={deleteOpen} className='existing-word-popup-btn'
                         onClick={() => {
                             navigate(`/lexicon/${definition.definition.word}`)
                             onClose()
@@ -202,12 +210,7 @@ const DefinitionBox = () => {
                 <div className='dialogue-container' id='deleteConfirmation'>
                     <span>{definition.definition.word}</span>{deleteText}
                     <div className='delete-actions'>
-                        <button onClick={() => {
-                            if (definition.inLexicon) {
-                                navigate('/lexicon')
-                            }
-                            setLexicon('delete')
-                        }}>Remove from Lexicon</button>
+                        <button onClick={() => setLexicon('delete')}>Remove from Lexicon</button>
                         <button onClick={() => setDeleteOpen(false)}>Cancel</button>
                     </div>
                 </div>
