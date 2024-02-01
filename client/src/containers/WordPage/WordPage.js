@@ -9,12 +9,14 @@ import {
     FaSortNumericDown, FaSortNumericDownAlt
 } from 'react-icons/fa'
 import { IoIosAddCircleOutline } from 'react-icons/io'
+import { RiDeleteBin6Fill } from 'react-icons/ri';
 import { Navigate, useNavigate } from 'react-router-dom'
 import { fetchWord } from '../../utils/fetcher'
 import { setDefinition, setDefinitionOpen, setInWord } from '../../slices/DefinitionSlice'
 import { updateLexicon } from '../../utils/userAccount'
 import { setUser } from '../../slices/UserSlice'
 import { sortCollection } from '../../utils/sortSearch'
+import { setAlert, setAlertOpen } from '../../slices/AlertBoxSlice'
 import DefinitionBox from '../../components/PopupBox/DefinitionBox'
 import EmptyState from '../../components/EmptyState/EmptyState'
 import './WordPage.css'
@@ -24,6 +26,7 @@ const WordPage = () => {
     const user = useSelector(state => state.user)
     const { definitionOpen } = useSelector(state => state.definition)
     const [sortOpen, setSortOpen] = useState(false)
+    const [deleteOpen, setDeleteOpen] = useState(false)
     const definition = user.words.find(item => item.word === word)
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -36,6 +39,23 @@ const WordPage = () => {
         let res = await updateLexicon({ ...definition, favorite: !definition.favorite })
         let sortedRes = sortCollection(res.value.words, user.wordSort.sortBy, user.wordSort.sortDirection)
         dispatch(setUser({ ...user, words: sortedRes }))
+    }
+
+    const onDelete = async () => {
+        let res = await updateLexicon({ ...definition, meanings: [] })
+
+        dispatch(setAlert({
+            subject: word,
+            body: ' has been removed your lexicon.',
+            closeText: 'Close'
+        }))
+
+        let sortedRes = sortCollection(res.value.words, user.wordSort.sortBy, user.wordSort.sortDirection)
+
+        dispatch(setAlertOpen(true))
+        dispatch(setUser({ ...user, words: sortedRes }))
+
+        navigate('/lexicon')
     }
 
     const onWordSearch = async () => {
@@ -93,6 +113,7 @@ const WordPage = () => {
                 <div className='single-view-subtitle'>{definition?.phonetic}</div>
             </div>
             <div className='page-container'>
+                <button className='word-page-delete-btn' onClick={() => setDeleteOpen(true)}><RiDeleteBin6Fill size={20} /></button>
                 <div className='word-definitions-display-container'>
                     {definition?.meanings.map(item => {
                         return (
@@ -130,6 +151,15 @@ const WordPage = () => {
                 </div>
                 {definitionOpen && <DefinitionBox />}
             </div>
+            {deleteOpen ?
+                <div className='dialogue-container' id='wordDeleteConfirm'>
+                    <span>{word}</span> will be removed from your lexicon.
+                    <div className='delete-actions'>
+                        <button onClick={() => onDelete()}>Remove from Lexicon</button>
+                        <button onClick={() => setDeleteOpen(false)}>Cancel</button>
+                    </div>
+                </div>
+                : null}
         </>
         : <Navigate to='/' />
     )

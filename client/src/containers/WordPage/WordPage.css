@@ -76,3 +76,27 @@
     top: 2rem;
     left: 0;
 }
+
+.word-page-delete-btn {
+    border: none;
+    background: none;
+    display: flex;
+    margin: auto;
+    margin-top: 0.75rem;
+    color: var(--red)
+}
+
+#wordDeleteConfirm {
+    max-width: 35rem;
+    text-align: center;
+    padding: 1rem;
+    font-size: clamp(0.95rem, 5vw, 1.25rem);
+}
+
+#wordDeleteConfirm span {
+    color: var(--red);
+}
+
+#wordDeleteConfirm .delete-actions {
+    padding-top: 1.5rem;
+}
